@@ -63,5 +63,10 @@ namespace QBert.Classes
         {
             brush.Draw(texture, rect, Color.White);
         }
+
+        public void Jump(Vector2 new_position)
+        {
+
+        }
     }
 }
