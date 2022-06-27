@@ -69,7 +69,7 @@ namespace QBert
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here gfgddgfgdfsfeewfwf
+            // TODO: Add your update logic here 
             player.Update();
             player.Position = new Vector2(cubes[player.IndexY][player.IndexX].Rect_top.X + 25,  cubes[player.IndexY][player.IndexX].Rect_top.Y - 20 );
 
