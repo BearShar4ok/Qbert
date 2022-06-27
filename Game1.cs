@@ -10,13 +10,14 @@ namespace QBert
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        
+
         private int cube_coord_x;
         private int cube_coord_y;
         private int cube_width = 100;
         private int cube_height = 100;
         private List<List<Cube>> cubes = new List<List<Cube>>();
         private Player player;
+
 
         public Game1()
         {
@@ -48,7 +49,7 @@ namespace QBert
                 }
             }
 
-            player = new Player(new Vector2(cubes[6][0].Rect_top.X + 25, cubes[6][0].Rect_top.Y - 20), 0, 6);
+            player = new Player(new Vector2(cubes[4][1].Rect_top.X + 25, cubes[4][1].Rect_top.Y - 20), 1, 4);
             base.Initialize();
         }
 
@@ -70,8 +71,10 @@ namespace QBert
                 Exit();
 
             // TODO: Add your update logic here
-            player.Update();
-            player.Jump(new Vector2(cubes[player.IndexY][player.IndexX].Rect_top.X + 25, cubes[player.IndexY][player.IndexX].Rect_top.Y - 20));
+
+
+            player.Update(new Vector2(cubes[player.IndexY][player.IndexX].Rect_top.X + 25, cubes[player.IndexY][player.IndexX].Rect_top.Y - 20));
+            
             base.Update(gameTime);
         }
 
@@ -92,5 +95,7 @@ namespace QBert
 
             base.Draw(gameTime);
         }
+
+
     }
 }
