@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -36,9 +36,12 @@ namespace QBert.Classes
 
         public void Update()
         {
+            if (Keyboard.GetState() == prevState) return;
+            else prevState = Keyboard.GetState();
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 indexY++;
+                indexX--;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
@@ -52,7 +55,6 @@ namespace QBert.Classes
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
                 indexY++;
-                indexX++;
             }
             rect = new Rectangle((int)position.X, (int)position.Y, 50, 50);
         }
