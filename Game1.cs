@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -74,7 +74,7 @@ namespace QBert
 
 
             player.Update(new Vector2(cubes[player.IndexY][player.IndexX].Rect_top.X + 25, cubes[player.IndexY][player.IndexX].Rect_top.Y - 20));
-            
+
             base.Update(gameTime);
         }
 
@@ -95,7 +95,5 @@ namespace QBert
 
             base.Draw(gameTime);
         }
-
-
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -96,7 +96,7 @@ namespace QBert.Classes
 
 
 
-            
+
         }
 
         public void Draw(SpriteBatch brush)
