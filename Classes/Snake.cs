@@ -50,14 +50,15 @@ namespace QBert.Classes
         public void Follow(Vector2 playerIndexes)
         {
             if ((indexY - playerIndexes.Y == 1 && (indexX == playerIndexes.X || indexX - playerIndexes.X == 1)) || 
-                (indexY - playerIndexes.Y == -1 && (indexX == playerIndexes.X || indexX - playerIndexes.X == -1)))
+                (indexY - playerIndexes.Y == -1 && (indexX == playerIndexes.X || indexX - playerIndexes.X == -1)) ||
+                (indexY - playerIndexes.Y == 0 && (false)))
             {
                 indexX = (int)playerIndexes.X;
                 indexY = (int)playerIndexes.Y;
                 return;
             }
             indexY += (playerIndexes.Y >= indexY) ? 1 : -1;
-            indexX += (playerIndexes.X >= indexX) ? 0 : (playerIndexes.Y < indexY) ? 1 : -1;
+            indexX += (playerIndexes.Y == indexY) ? 0 : (playerIndexes.Y < indexY ? (indexX >= playerIndexes.X ? 0 : 1) : 0);
         }
     }
 }
