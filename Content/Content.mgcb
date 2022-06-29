@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../../OneDrive/Рабочий стол/Марк информатика/Qbert/Qbert.png
+#begin Qbert.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../OneDrive/Рабочий стол/Марк информатика/Qbert/Qbert.png;Qbert.png
+/build:Qbert.png
 
-#begin ../../../../../OneDrive/Рабочий стол/Марк информатика/Qbert/redCircle.png
+#begin redCircle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,7 +35,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../OneDrive/Рабочий стол/Марк информатика/Qbert/redCircle.png;redCircle.png
+/build:redCircle.png
 
 #begin cube.png
 /importer:TextureImporter
