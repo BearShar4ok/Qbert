@@ -47,7 +47,7 @@ namespace QBert.Classes
 
         public void Draw(SpriteBatch brush)
         {
-            brush.Draw(texture_cube, rect_cube, Color.White);
+            //brush.Draw(texture_cube, rect_cube, Color.White);
             brush.Draw(texture_top, rect_top, top_color);
             brush.Draw(texture_left, rect_left, Left_color);
             brush.Draw(texture_right, rect_right, Right_color);

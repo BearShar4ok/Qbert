@@ -44,10 +44,10 @@ namespace QBert
                 cubes.Add(new List<Cube>());
                 for (int j = 0; j < i + 1; j++)
                 {
-                    cubes[6 - i].Add(new Cube(new Rectangle(cube_coord_x + (cube_width / 2 - 3) * (6 - i) + (cube_width - 3) * j, cube_coord_y - (6 - i) * (cube_height - 27), 100, 100),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 3) * (6 - i) + (cube_width - 3) * j, cube_coord_y - (6 - i) * (cube_height - 27), 98, 50),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 3) * (6 - i) + (cube_width - 3) * j + 50, cube_coord_y - (6 - i) * (cube_height - 27) + 24, 47, 73),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 3) * (6 - i) + (cube_width - 3) * j, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 50, 73))
+                    cubes[6 - i].Add(new Cube(new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j, cube_coord_y - (6 - i) * (cube_height - 27), 100, 100),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j - 2, cube_coord_y - (6 - i) * (cube_height - 27), 95, 50),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j + 45, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 47, 73),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j - 3, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 50, 73))
                     { Top_color = Color.Blue, Left_color = Color.Brown, Right_color = Color.Orange });
                 }
             }
