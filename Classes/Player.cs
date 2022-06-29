@@ -12,23 +12,21 @@ namespace QBert.Classes
     class Player
     {
         private Vector2 position;
+        private Vector2 newPosition;
         private Texture2D texture;
         private Rectangle rectangleOfPlayer;
         private int indexX;
         private int indexY;
+        private int spriteIndex = 0;
+        private int sprite_width = 50;
+        private int sprite_height = 50;
         private KeyboardState prevState = new KeyboardState();
 
-        private int startSpeed;
+        private JumpManager playerJump;
+        private bool isJumpStart = false;
 
-        private bool isRight;
 
-        private int horizontalSpeed;
-        private int verticallSpeed;
-        private const float g = 25f;
-        private float t1;
-        private Vector2 targetPosition;
-        private Thread jumpThread;
-
+        public Action<bool> JumpstateChanged;
         public Vector2 Position { get { return position; } set { position = value; } }
         public int IndexX { get { return indexX; } }
         public int IndexY { get { return indexY; } }
@@ -38,117 +36,67 @@ namespace QBert.Classes
             this.position = position;
             this.indexX = indexX;
             this.indexY = indexY;
-
-
-            horizontalSpeed = 10;
-            verticallSpeed = 2;
-            texture = null;
-            t1 = 0;
-            isRight = true;
-            startSpeed = 30;
         }
 
         public void LoadContent(ContentManager manager)
         {
             texture = manager.Load<Texture2D>("Qbert");
-            rectangleOfPlayer = new Rectangle((int)position.X, (int)position.Y, 50, 50);
+            rectangleOfPlayer = new Rectangle((int)position.X, (int)position.Y, sprite_width, sprite_height);
         }
 
-        public void Update(Vector2 newPosition)
+        public void Update(GameTime gametime)
         {
-            t1 += 0.1f;
-            if (newPosition != targetPosition)
+            if (playerJump != null)
             {
-                targetPosition = newPosition;
+                position = playerJump.position;
+            }
+            if (isJumpStart)
+            {
+                playerJump.Update(gametime);
+            }
 
-                //jumpThread = new Thread(Jump);
-                //jumpThread.Start();
-            }
-            if (position != targetPosition)
-            {
-                Jump();
-            }
-            rectangleOfPlayer = new Rectangle((int)position.X, (int)position.Y, 50, 50);
+
+            rectangleOfPlayer = new Rectangle(spriteIndex * sprite_width, 0, sprite_width, sprite_height);
 
             if (Keyboard.GetState() == prevState)
                 return;
             else
+            {
+                playerJump = new JumpManager(newPosition, position);
+
+                isJumpStart = true;
                 prevState = Keyboard.GetState();
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
-            {
-                indexY++;
-                indexX--;
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (true)
             {
-                indexY--;
+                if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                {
+                    indexY++;
+                    indexX--;
+                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.A))
+                {
+                    indexY--;
+                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    indexY--;
+                    indexX++;
+                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.E))
+                {
+                    indexY++;
+                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                }
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                indexY--;
-                indexX++;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.E))
-            {
-                indexY++;
-            }
-
-
-
-
-
         }
 
         public void Draw(SpriteBatch brush)
         {
-            brush.Draw(texture, rectangleOfPlayer, Color.White);
-        }
-
-        private void Jump()
-        {
-            position.X += horizontalSpeed;
-            if (!ZoroSpeed(t1))
-            {
-                position.Y += YJump(t1);
-            }
-            else
-            {
-                position.Y -= YFall();
-            }
-            //this.position = new_position;
-        }
-        private void Fall()
-        {
-            position.Y += YFall();
-        }
-        public bool ZoroSpeed(float t)
-        {
-            if (startSpeed - (g * t) <= 0)
-            {
-                return true;
-            }
-            return false;
-        }
-        public float YJump(float t)
-        {
-
-            if (t <= 0)
-            {
-                return 0;
-            }
-            return ((startSpeed * t) - (g * t * t / 2)) - ((startSpeed * (t - 0.1f)) - (g * (t - 0.1f) * (t - 0.1f) / 2));
-        }
-        private float YFall()
-        {
-            if (t1 <= 0)
-            {
-                return 0;
-            }
-            if (t1 > 6)
-            {
-                t1 = 6;
-            }
-            return ((g * t1 * t1 / 2)) - ((g * (t1 - 0.1f) * (t1 - 0.1f) / 2));
+            brush.Draw(texture, position, rectangleOfPlayer, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
     }
 }
