@@ -12,7 +12,7 @@ namespace QBert.Classes
     class Player
     {
         private Vector2 position;
-        private Vector2 newPosition;
+        private Vector2 targetPosition;
         private Texture2D texture;
         private Rectangle rectangleOfPlayer;
         private int indexX;
@@ -26,7 +26,6 @@ namespace QBert.Classes
         private bool isJumpStart = false;
 
 
-        public Action<bool> JumpstateChanged;
         public Vector2 Position { get { return position; } set { position = value; } }
         public int IndexX { get { return indexX; } }
         public int IndexY { get { return indexY; } }
@@ -36,6 +35,8 @@ namespace QBert.Classes
             this.position = position;
             this.indexX = indexX;
             this.indexY = indexY;
+            playerJump = new JumpManager();
+            //playerJump.JumpStateChanged += ChangeJumpState;
         }
 
         public void LoadContent(ContentManager manager)
@@ -46,15 +47,12 @@ namespace QBert.Classes
 
         public void Update(GameTime gametime)
         {
-            if (playerJump != null)
+            if (playerJump != null && playerJump.NowJumpState == JumpStates.inJump)
             {
+
+                playerJump.Update(gametime);
                 position = playerJump.position;
             }
-            if (isJumpStart)
-            {
-                playerJump.Update(gametime);
-            }
-
 
             rectangleOfPlayer = new Rectangle(spriteIndex * sprite_width, 0, sprite_width, sprite_height);
 
@@ -62,34 +60,35 @@ namespace QBert.Classes
                 return;
             else
             {
-                playerJump = new JumpManager(newPosition, position);
-
-                isJumpStart = true;
                 prevState = Keyboard.GetState();
             }
-            if (true)
+            if ( playerJump.NowJumpState == JumpStates.readyToJump)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
                     indexY++;
                     indexX--;
-                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    playerJump.UpdateTargetPosition(targetPosition, position);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.A))
                 {
                     indexY--;
-                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    playerJump.UpdateTargetPosition(targetPosition, position);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
                     indexY--;
                     indexX++;
-                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    playerJump.UpdateTargetPosition(targetPosition, position);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
                     indexY++;
-                    newPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    playerJump.UpdateTargetPosition(targetPosition, position);
                 }
             }
         }
@@ -97,6 +96,10 @@ namespace QBert.Classes
         public void Draw(SpriteBatch brush)
         {
             brush.Draw(texture, position, rectangleOfPlayer, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+        }
+        private void ChangeJumpState(bool res)
+        {
+            isJumpStart = res;
         }
     }
 }

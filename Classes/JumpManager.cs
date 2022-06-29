@@ -20,25 +20,37 @@ namespace QBert.Classes
         private float timeToEnd = 1.5f;
         private float nowTime;
 
-        private bool isJumpGoing;
+        public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
 
-        public JumpManager(Vector2 targetPos, Vector2 startPos)
+        // bool isJumpGoing;
+        //public Action<bool> JumpStateChanged;
+        public void Update(GameTime gametime)
+        {
+            switch (NowJumpState)
+            {
+                case JumpStates.readyToJump:
+                    break;
+                case JumpStates.inJump:
+                    Jump(gametime);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void UpdateTargetPosition(Vector2 targetPos, Vector2 startPos)
         {
             this.targetPos = targetPos;
 
             this.startPos = startPos;
             position = startPos;
-            isJumpGoing = true;
-        }
-        public void Update(GameTime gametime)
-        {
-            if (isJumpGoing)
-            {
-                Jump(gametime);
-            }
+            NowJumpState = JumpStates.inJump;
         }
         private void Jump(GameTime gametime)
         {
+            //if (position == targetPos)
+            //{
+            //    NowJumpState = JumpStates.readyToJump;
+            //}
             nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
 
 
@@ -49,7 +61,8 @@ namespace QBert.Classes
             }
             else
             {
-                isJumpGoing = false;
+                nowTime = 0;
+                NowJumpState = JumpStates.readyToJump;
             }
         }
     }
