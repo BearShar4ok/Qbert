@@ -90,7 +90,7 @@ namespace QBert
             foreach (RedCircle circle in redCircles) circle.Update();
             foreach (GreenCircle circle in greenCircles) circle.Update();
             purpleCircle.Update();
-            snake.Update();
+            snake.Update(new Vector2(player.IndexX, player.IndexY));
 
             base.Update(gameTime);
         }
