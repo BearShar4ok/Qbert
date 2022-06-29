@@ -10,26 +10,14 @@ namespace QBert.Classes
 {
     class GreenCircle : IEnemy
     {
-        private Random random = new Random();
-        private Vector2 position;
-        private Texture2D texture;
-        private int indexX = 0;
-        private int indexY = 5;
-        private Rectangle sourceRectangle;
-        private int sprite_width = 49;
-        private int sprite_height = 30;
-        private int spriteIndex = 1;
-
-        private int jumpTimer = 60;   //  скорее всего, будет удалено
-
-        public int IndexX { get { return indexX; } }
-        public int IndexY { get { return indexY; } }
-        public Vector2 Position { get { return position; } }
         public GreenCircle()
         {
-            position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y + 5);
+            position = CountPositionByIndex();
+            sprite_width = 49;
+            sprite_height = 30;
+            spriteIndex = 1;
         }
-        public void LoadContent(ContentManager manager)
+        public override void LoadContent(ContentManager manager)
         {
             texture = manager.Load<Texture2D>("greenCircle");
         }
@@ -37,10 +25,10 @@ namespace QBert.Classes
         {
             brush.Draw(texture, position, sourceRectangle, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
-        public override void Update(GameTime gametime)
+
+        public override Vector2 CountPositionByIndex()
         {
-            position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y + 5);
-            sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
+            return new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y + 5);
         }
     }
 }

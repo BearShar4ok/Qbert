@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace QBert.Classes
 {
-    class JumpManager
+    public class JumpManager
     {
         private Vector2 targetPos;
         private Vector2 startPos;
