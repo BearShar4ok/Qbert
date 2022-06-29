@@ -49,9 +49,9 @@ namespace QBert.Classes
         }
         public void Follow(Vector2 playerIndexes)
         {
-            if ((indexY - playerIndexes.Y == 1 && (indexX == playerIndexes.X || indexX - playerIndexes.X == 1)) || 
-                (indexY - playerIndexes.Y == -1 && (indexX == playerIndexes.X || indexX - playerIndexes.X == -1)) ||
-                (indexY - playerIndexes.Y == 0 && (false)))
+            if ((Math.Abs(indexY - playerIndexes.Y) == 1 && indexX == playerIndexes.X) || 
+                (indexY - playerIndexes.Y == -1 && indexX - playerIndexes.X == 1) ||
+                (indexY - playerIndexes.Y == 1 && indexX - playerIndexes.X == -1))
             {
                 indexX = (int)playerIndexes.X;
                 indexY = (int)playerIndexes.Y;
