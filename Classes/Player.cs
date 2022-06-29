@@ -19,8 +19,8 @@ namespace QBert.Classes
         private KeyboardState prevState = new KeyboardState();
         private int indexX;
         private int indexY;
-        private int spriteIndex = 0;
-        private int sprite_width = 50;
+        private int spriteIndex = 7;
+        private int sprite_width = 49;
         private int sprite_height = 50;
 
         public Vector2 Position { get { return position; } set { position = value; } }
@@ -49,7 +49,9 @@ namespace QBert.Classes
                 position = playerJump.position;
             }
 
-            rectangleOfPlayer = new Rectangle(spriteIndex * sprite_width, 0, sprite_width, sprite_height);
+            rectangleOfPlayer = new Rectangle(spriteIndex != 7 ? spriteIndex * sprite_width : 349, 0, spriteIndex != 1 ? sprite_width : 48, sprite_height);
+
+            if (playerJump.NowJumpState == JumpStates.readyToJump) spriteIndex -= spriteIndex % 2;
 
             if (Keyboard.GetState() == prevState)
                 return;
@@ -57,10 +59,11 @@ namespace QBert.Classes
             {
                 prevState = Keyboard.GetState();
             }
-            if ( playerJump.NowJumpState == JumpStates.readyToJump)
+            if (playerJump.NowJumpState == JumpStates.readyToJump)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
+                    spriteIndex = 3;
                     indexY++;
                     indexX--;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
@@ -68,12 +71,14 @@ namespace QBert.Classes
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.A))
                 {
+                    spriteIndex = 7;
                     indexY--;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
+                    spriteIndex = 5;
                     indexY--;
                     indexX++;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
@@ -81,6 +86,7 @@ namespace QBert.Classes
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
+                    spriteIndex = 1;
                     indexY++;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);

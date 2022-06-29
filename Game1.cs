@@ -87,9 +87,9 @@ namespace QBert
 
             player.Update(gameTime);
 
-            foreach (RedCircle circle in redCircles) circle.Update();
-            foreach (GreenCircle circle in greenCircles) circle.Update();
-            purpleCircle.Update();
+            foreach (RedCircle circle in redCircles) circle.Update(gameTime);
+            foreach (GreenCircle circle in greenCircles) circle.Update(gameTime);
+            purpleCircle.Update(gameTime);
             snake.Update(new Vector2(player.IndexX, player.IndexY));
 
             base.Update(gameTime);

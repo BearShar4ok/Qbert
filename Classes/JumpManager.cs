@@ -14,10 +14,10 @@ namespace QBert.Classes
     {
         private Vector2 targetPos;
         private Vector2 startPos;
-        private float timeToEnd = 1f;
+        private float timeToEnd = 0.4f;
         private float nowTime;
 
-        private const float g = 400f;
+        private const float g = 2000f;
 
         public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
         public Vector2 position;

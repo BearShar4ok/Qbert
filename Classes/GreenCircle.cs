@@ -37,22 +37,10 @@ namespace QBert.Classes
         {
             brush.Draw(texture, position, sourceRectangle, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
-        public override void Update()
+        public override void Update(GameTime gametime)
         {
-            MoveDown();
             position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y + 5);
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
-        }
-        public override void MoveDown()
-        {
-            if (indexY == 0) return;
-            jumpTimer--;
-            if (jumpTimer == 0)
-            {
-                indexY--;
-                indexX += random.Next(0, 2);
-                jumpTimer = 60;
-            }
         }
     }
 }

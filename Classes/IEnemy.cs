@@ -11,7 +11,6 @@ namespace QBert.Classes
     public abstract class IEnemy
     {
         public abstract void Draw(SpriteBatch brush);
-        public abstract void Update();
-        public abstract void MoveDown();
+        public abstract void Update(GameTime gameTime);
     }
 }
