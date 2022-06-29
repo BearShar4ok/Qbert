@@ -12,18 +12,16 @@ namespace QBert.Classes
 {
     class JumpManager
     {
-        private Vector2 targetPos;//
-        private Vector2 startPos;//
-        public Vector2 position;
-        private const float g = 200f;
-
-        private float timeToEnd = 1.5f;
+        private Vector2 targetPos;
+        private Vector2 startPos;
+        private float timeToEnd = 1f;
         private float nowTime;
 
-        public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
+        private const float g = 400f;
 
-        // bool isJumpGoing;
-        //public Action<bool> JumpStateChanged;
+        public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
+        public Vector2 position;
+
         public void Update(GameTime gametime)
         {
             switch (NowJumpState)
@@ -47,10 +45,6 @@ namespace QBert.Classes
         }
         private void Jump(GameTime gametime)
         {
-            //if (position == targetPos)
-            //{
-            //    NowJumpState = JumpStates.readyToJump;
-            //}
             nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
 
 

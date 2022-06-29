@@ -14,17 +14,14 @@ namespace QBert.Classes
         private Vector2 position;
         private Vector2 targetPosition;
         private Texture2D texture;
+        private JumpManager playerJump;
         private Rectangle rectangleOfPlayer;
+        private KeyboardState prevState = new KeyboardState();
         private int indexX;
         private int indexY;
         private int spriteIndex = 0;
         private int sprite_width = 50;
         private int sprite_height = 50;
-        private KeyboardState prevState = new KeyboardState();
-
-        private JumpManager playerJump;
-        private bool isJumpStart = false;
-
 
         public Vector2 Position { get { return position; } set { position = value; } }
         public int IndexX { get { return indexX; } }
@@ -36,7 +33,6 @@ namespace QBert.Classes
             this.indexX = indexX;
             this.indexY = indexY;
             playerJump = new JumpManager();
-            //playerJump.JumpStateChanged += ChangeJumpState;
         }
 
         public void LoadContent(ContentManager manager)
@@ -49,7 +45,6 @@ namespace QBert.Classes
         {
             if (playerJump != null && playerJump.NowJumpState == JumpStates.inJump)
             {
-
                 playerJump.Update(gametime);
                 position = playerJump.position;
             }
@@ -92,14 +87,9 @@ namespace QBert.Classes
                 }
             }
         }
-
         public void Draw(SpriteBatch brush)
         {
             brush.Draw(texture, position, rectangleOfPlayer, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
-        }
-        private void ChangeJumpState(bool res)
-        {
-            isJumpStart = res;
         }
     }
 }
