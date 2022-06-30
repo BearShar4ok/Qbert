@@ -51,11 +51,11 @@ namespace QBert
                     cubes.Add(new List<Cube>());
                 }
 
-                for (int j = 0; j <= amoutCellesInLine-i; j++)
+                for (int j = 0; j <= amoutCellesInLine - i; j++)
                 {
                     celles[i].Add(new Celle(
-                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (  i) + (cube_width - amoutCellesInLine) * j, cube_coord_y - (  i) * (cube_height - 27), 100, 100),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (  i) + (cube_width - amoutCellesInLine) * j - 2, cube_coord_y - (  i) * (cube_height - 27), 95, 50)
+                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellesInLine) * j, cube_coord_y - (i) * (cube_height - 27), 100, 100),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellesInLine) * j - 2, cube_coord_y - (i) * (cube_height - 27), 95, 50)
                     ));
                     if (j > 0 && j < amoutCellesInLine - i && i != 0 && i != 9 && i != 8)
                     {
@@ -63,7 +63,7 @@ namespace QBert
                          new Rectangle(celles[i][j].X - 2, celles[i][j].Y, 95, 50),
                          new Rectangle(celles[i][j].X + 45, celles[i][j].Y + 25, 47, 73),
                          new Rectangle(celles[i][j].X - 3, celles[i][j].Y + 25, 50, 73))
-                        { Top_color = Color.Blue, Left_color = Color.Brown, Right_color = Color.Orange });
+                        { Top_colors = new List<Color>() { Color.Blue, Color.Red }, Left_color = Color.Brown, Right_color = Color.Orange });
                     }
 
                 }
