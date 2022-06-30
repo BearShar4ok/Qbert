@@ -18,6 +18,7 @@ namespace QBert
         private int cube_height = 100;
         private List<RedCircle> redCircles = new List<RedCircle>();
         private PurpleCircle purpleCircle;
+        private CoolEnemy coolEnemy;
         private List<GreenCircle> greenCircles = new List<GreenCircle>();
         private Snake snake;
         private Player player;
@@ -42,19 +43,20 @@ namespace QBert
             for (int i = 6; i >= 0; i--)
             {
                 cubes.Add(new List<Cube>());
-                for (int j = 0; j < i + 1; j++)
+                for (int j = 0; j <= i; j++)
                 {
                     cubes[6 - i].Add(new Cube(new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j, cube_coord_y - (6 - i) * (cube_height - 27), 100, 100),
                          new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j - 2, cube_coord_y - (6 - i) * (cube_height - 27), 95, 50),
                          new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j + 45, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 47, 73),
                          new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j - 3, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 50, 73))
-                    { Top_color = Color.Blue, Left_color = Color.Brown, Right_color = Color.Orange });
+                    { Top_colors = new List<Color>() { Color.Blue, Color.Red }, Left_color = Color.Brown, Right_color = Color.Orange });
                 }
             }
             redCircles.Add(new RedCircle());
             greenCircles.Add(new GreenCircle());
             purpleCircle = new PurpleCircle();
             snake = new Snake();
+            coolEnemy = new CoolEnemy();
 
             player = new Player(new Vector2(cubes[6][0].Rect_top.X + 25, cubes[6][0].Rect_top.Y - 20), 0, 6);
             base.Initialize();
@@ -73,6 +75,7 @@ namespace QBert
             foreach (GreenCircle circle in greenCircles) circle.LoadContent(Content);
             purpleCircle.LoadContent(Content);
             snake.LoadContent(Content);
+            coolEnemy.LoadContent(Content);
 
             player.LoadContent(Content);
         }
@@ -90,7 +93,8 @@ namespace QBert
             foreach (RedCircle circle in redCircles) circle.Update(gameTime);
             foreach (GreenCircle circle in greenCircles) circle.Update(gameTime);
             purpleCircle.Update(gameTime);
-            snake.Update(new Vector2(player.IndexX, player.IndexY));
+            snake.Update(new Vector2(player.IndexX, player.IndexY), gameTime);
+            coolEnemy.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -112,6 +116,7 @@ namespace QBert
 
             player.Draw(_spriteBatch);
             snake.Draw(_spriteBatch);
+            coolEnemy.Draw(_spriteBatch);
 
             _spriteBatch.End();
 

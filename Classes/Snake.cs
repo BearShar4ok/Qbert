@@ -17,9 +17,11 @@ namespace QBert.Classes
         private Rectangle sourceRectangle;
         private int sprite_width = 50;
         private int sprite_height = 100;
-        private int spriteIndex = 6;
+        private int spriteIndex = 5;
 
-        private int jumpTimer = 60;
+        private int jumpTimer = 20;
+
+        private JumpManager snakeJump;
 
         public int IndexX { get { return indexX; } }
         public int IndexY { get { return indexY; } }
@@ -27,6 +29,7 @@ namespace QBert.Classes
         public Snake()
         {
             position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70);
+            snakeJump = new JumpManager();
         }
         public void LoadContent(ContentManager manager)
         {
@@ -36,29 +39,55 @@ namespace QBert.Classes
         {
             brush.Draw(texture, position, sourceRectangle, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
-        public void Update(Vector2 playerIndexes)
+        public void Update(Vector2 playerIndexes, GameTime gametime)
         {
-            jumpTimer--;
-            if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
+            if (snakeJump != null && snakeJump.NowJumpState == JumpStates.inJump)
             {
-                Follow(playerIndexes);
-                jumpTimer = 60;
+                snakeJump.Update(gametime);
+                position = snakeJump.position;
             }
-            position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70);
+
+            if (snakeJump.NowJumpState == JumpStates.readyToJump)
+            {
+                jumpTimer--;
+                spriteIndex -= spriteIndex % 2;
+                if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
+                {
+                    Follow(playerIndexes);
+                    snakeJump.UpdateTargetPosition(new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70), position);
+                    jumpTimer = 20;
+                }
+            }
+            
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
         }
         public void Follow(Vector2 playerIndexes)
         {
-            if ((Math.Abs(indexY - playerIndexes.Y) == 1 && indexX == playerIndexes.X) || 
+            /*if ((Math.Abs(indexY - playerIndexes.Y) == 1 && indexX == playerIndexes.X) || 
                 (indexY - playerIndexes.Y == -1 && indexX - playerIndexes.X == 1) ||
                 (indexY - playerIndexes.Y == 1 && indexX - playerIndexes.X == -1))
             {
-                indexX = (int)playerIndexes.X;
-                indexY = (int)playerIndexes.Y;
+                
                 return;
+            }*/
+
+            if (indexX == (int)playerIndexes.X && indexY == (int)playerIndexes.Y) return;
+
+
+            int n = (int)playerIndexes.X - indexX;
+            int k = (int)playerIndexes.Y - indexY + n;
+
+            if (Math.Abs(k) >= Math.Abs(n)) indexY += k > 0 ? 1 : -1;
+            else
+            {
+                indexX += n > 0 ? 1 : -1;
+                indexY += n > 0 ? -1 : 1;
             }
-            indexY += (playerIndexes.Y >= indexY) ? 1 : -1;
-            indexX += (playerIndexes.Y == indexY) ? 0 : (playerIndexes.Y < indexY ? (indexX >= playerIndexes.X ? 0 : 1) : 0);
+
+            if (Math.Abs(k) >= Math.Abs(n) && k > 0) spriteIndex = 1;
+            if (Math.Abs(k) >= Math.Abs(n) && k <= 0) spriteIndex = 3;
+            if (Math.Abs(k) < Math.Abs(n) && n > 0) spriteIndex = 5;
+            if (Math.Abs(k) < Math.Abs(n) && n <= 0) spriteIndex = 7;
         }
     }
 }
