@@ -53,7 +53,7 @@ namespace QBert.Classes
 
             if (playerJump.NowJumpState == JumpStates.readyToJump)
             {
-                if (Game1.cubes[IndexY][IndexX].Top_color_index != Game1.cubes[IndexY][IndexX].Top_colors.Count - 1 && hasJumped) Game1.cubes[IndexY][IndexX].ChangeTopColor(true);
+                if (Game1.cubes[IndexY - 1][IndexX - 1].Top_color_index != Game1.cubes[IndexY - 1][IndexX - 1].Top_colors.Count - 1 && hasJumped) Game1.cubes[IndexY - 1][IndexX - 1].ChangeTopColor(true);
                 spriteIndex -= spriteIndex % 2;
             }
             
@@ -71,7 +71,7 @@ namespace QBert.Classes
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
-                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + 25, Game1.Cells[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
                     if (!hasJumped) hasJumped = true;
                 }
@@ -79,7 +79,7 @@ namespace QBert.Classes
                 {
                     spriteIndex = 7;
                     indexY--;
-                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + 25, Game1.Cells[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
                     if (!hasJumped) hasJumped = true;
                 }
@@ -88,7 +88,7 @@ namespace QBert.Classes
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
-                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + 25, Game1.Cells[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
                     if (!hasJumped) hasJumped = true;
                 }
@@ -96,7 +96,7 @@ namespace QBert.Classes
                 {
                     spriteIndex = 1;
                     indexY++;
-                    targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
+                    targetPosition = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + 25, Game1.Cells[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
                     if (!hasJumped) hasJumped = true;
                 }

@@ -10,7 +10,7 @@ namespace QBert.Classes
 {
     class GreenCircle : IEnemy
     {
-        public GreenCircle()
+        public GreenCircle() : base()
         {
             position = CountPositionByIndex();
             sprite_width = 49;
@@ -28,7 +28,7 @@ namespace QBert.Classes
 
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.celles[indexY][indexX].Rect_top.X + 20, Game1.celles[indexY][indexX].Rect_top.Y + 5);
+            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y + 5);
         }
     }
 }

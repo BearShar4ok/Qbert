@@ -13,8 +13,8 @@ namespace QBert.Classes
         protected Random random = new Random();
         protected Vector2 position;
         protected Texture2D texture;
-        protected int indexX = 0;
-        protected int indexY = 5;
+        protected int indexX = 1;
+        protected int indexY = 6;
         protected Rectangle sourceRectangle;
         protected int sprite_width;
         protected int sprite_height;
@@ -26,6 +26,10 @@ namespace QBert.Classes
         public virtual int IndexX { get { return indexX; } }
         public virtual int IndexY { get { return indexY; } }
 
+        public IEnemy()
+        {
+            indexX = random.Next(1, 3);
+        }
         public abstract void LoadContent(ContentManager manager);
         public virtual void Draw(SpriteBatch brush)
         {
@@ -45,7 +49,7 @@ namespace QBert.Classes
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
-                    if (indexY == 0) return;
+                    if (indexY == 1) return;
                     indexY--;
                     indexX += random.Next(0, 2);
                     circleJump.UpdateTargetPosition(CountPositionByIndex(), position);
