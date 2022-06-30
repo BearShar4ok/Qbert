@@ -22,7 +22,7 @@ namespace QBert.Classes
         private int spriteIndex = 7;
         private int sprite_width = 49;
         private int sprite_height = 50;
-
+        private bool hasJumped = false;
         public Vector2 Position { get { return position; } set { position = value; } }
         public int IndexX { get { return indexX; } }
         public int IndexY { get { return indexY; } }
@@ -51,7 +51,12 @@ namespace QBert.Classes
 
             rectangleOfPlayer = new Rectangle(spriteIndex != 7 ? spriteIndex * sprite_width : 349, 0, spriteIndex != 1 ? sprite_width : 48, sprite_height);
 
-            if (playerJump.NowJumpState == JumpStates.readyToJump) spriteIndex -= spriteIndex % 2;
+            if (playerJump.NowJumpState == JumpStates.readyToJump)
+            {
+                if (Game1.cubes[IndexY][IndexX].Top_color_index != Game1.cubes[IndexY][IndexX].Top_colors.Count - 1 && hasJumped) Game1.cubes[IndexY][IndexX].ChangeTopColor(true);
+                spriteIndex -= spriteIndex % 2;
+            }
+            
 
             if (Keyboard.GetState() == prevState)
                 return;
@@ -68,6 +73,7 @@ namespace QBert.Classes
                     indexX--;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
+                    if (!hasJumped) hasJumped = true;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.A))
                 {
@@ -75,6 +81,7 @@ namespace QBert.Classes
                     indexY--;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
+                    if (!hasJumped) hasJumped = true;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
@@ -83,6 +90,7 @@ namespace QBert.Classes
                     indexX++;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
+                    if (!hasJumped) hasJumped = true;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
@@ -90,6 +98,7 @@ namespace QBert.Classes
                     indexY++;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
+                    if (!hasJumped) hasJumped = true;
                 }
             }
         }

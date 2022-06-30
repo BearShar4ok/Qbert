@@ -17,14 +17,14 @@ namespace QBert.Classes
         private Rectangle rect_top;
         private Rectangle rect_right;
         private Rectangle rect_left;
-        private Color top_color;
+        private List<Color> top_colors;
         private Color left_color;
         private Color right_color;
+        private int top_color_index = 0;
 
-        public Color Top_color { get { return top_color; } set { top_color = value; } }
-
+        public int Top_color_index { get { return top_color_index; } }
+        public List<Color> Top_colors { get { return top_colors; } set { top_colors = value; } }
         public Color Left_color { get { return left_color; } set { left_color = value; } }
-
         public Color Right_color { get { return right_color; } set { right_color = value; } }
         public Rectangle Rect_top { get { return rect_top; } set { rect_top = value; } }
 
@@ -46,17 +46,14 @@ namespace QBert.Classes
         public void Draw(SpriteBatch brush)
         {
             //brush.Draw(texture_cube, rect_cube, Color.White);
-            brush.Draw(texture_top, rect_top, top_color);
+            brush.Draw(texture_top, rect_top, top_colors[top_color_index]);
             brush.Draw(texture_left, rect_left, Left_color);
             brush.Draw(texture_right, rect_right, Right_color);
         }
 
-        public void Draw(SpriteBatch brush,Color color)
+        public void ChangeTopColor(bool toNext)
         {
-            //brush.Draw(texture_cube, rect_cube, Color.White);
-            brush.Draw(texture_top, rect_top, color);
-            brush.Draw(texture_left, rect_left, color);
-            brush.Draw(texture_right, rect_right, color);
+            top_color_index = toNext ? top_color_index + 1 : 0;
         }
     }
 }

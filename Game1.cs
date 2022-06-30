@@ -20,6 +20,7 @@ namespace QBert
         private int cube_height = 100;
         private List<RedCircle> redCircles = new List<RedCircle>();
         private PurpleCircle purpleCircle;
+        private CoolEnemy coolEnemy;
         private List<GreenCircle> greenCircles = new List<GreenCircle>();
         private Snake snake;
         private Player player;
@@ -72,6 +73,7 @@ namespace QBert
             greenCircles.Add(new GreenCircle());
             purpleCircle = new PurpleCircle();
             snake = new Snake();
+            coolEnemy = new CoolEnemy();
 
             player = new Player(new Vector2(cubes[6][0].Rect_top.X + 25, cubes[6][0].Rect_top.Y - 20), 0, 6);
             base.Initialize();
@@ -97,6 +99,7 @@ namespace QBert
             foreach (GreenCircle circle in greenCircles) circle.LoadContent(Content);
             purpleCircle.LoadContent(Content);
             snake.LoadContent(Content);
+            coolEnemy.LoadContent(Content);
 
             player.LoadContent(Content);
         }
@@ -114,7 +117,8 @@ namespace QBert
             foreach (RedCircle circle in redCircles) circle.Update(gameTime);
             foreach (GreenCircle circle in greenCircles) circle.Update(gameTime);
             purpleCircle.Update(gameTime);
-            snake.Update(new Vector2(player.IndexX, player.IndexY));
+            snake.Update(new Vector2(player.IndexX, player.IndexY), gameTime);
+            coolEnemy.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -144,6 +148,7 @@ namespace QBert
 
             player.Draw(_spriteBatch);
             snake.Draw(_spriteBatch);
+            coolEnemy.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
