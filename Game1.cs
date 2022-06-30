@@ -9,6 +9,8 @@ namespace QBert
     public class Game1 : Game
     {
         public static List<List<Cube>> cubes = new List<List<Cube>>();
+        public static List<List<Celle>> celles = new List<List<Celle>>();
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -28,7 +30,6 @@ namespace QBert
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-
             _graphics.PreferredBackBufferWidth = 1000;
             _graphics.PreferredBackBufferHeight = 800;
         }
@@ -36,21 +37,37 @@ namespace QBert
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            cube_coord_x = _graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3;
+            cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width;
             cube_coord_y = _graphics.PreferredBackBufferHeight - 150;
 
-            for (int i = 6; i >= 0; i--)
+
+            int amoutCellesInLine = 9;
+            for (int i = 0; amoutCellesInLine >= i; i++)
             {
-                cubes.Add(new List<Cube>());
-                for (int j = 0; j < i + 1; j++)
+                celles.Add(new List<Celle>());
+                if (i != 0 && i != 9 && i != 8)
                 {
-                    cubes[6 - i].Add(new Cube(new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j, cube_coord_y - (6 - i) * (cube_height - 27), 100, 100),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j - 2, cube_coord_y - (6 - i) * (cube_height - 27), 95, 50),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j + 45, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 47, 73),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (6 - i) + (cube_width - 6) * j - 3, cube_coord_y - (6 - i) * (cube_height - 27) + 25, 50, 73))
-                    { Top_color = Color.Blue, Left_color = Color.Brown, Right_color = Color.Orange });
+                    cubes.Add(new List<Cube>());
+                }
+
+                for (int j = 0; j <= amoutCellesInLine-i; j++)
+                {
+                    celles[i].Add(new Celle(
+                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (  i) + (cube_width - amoutCellesInLine) * j, cube_coord_y - (  i) * (cube_height - 27), 100, 100),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (  i) + (cube_width - amoutCellesInLine) * j - 2, cube_coord_y - (  i) * (cube_height - 27), 95, 50)
+                    ));
+                    if (j > 0 && j < amoutCellesInLine - i && i != 0 && i != 9 && i != 8)
+                    {
+                        cubes[i - 1].Add(new Cube(
+                         new Rectangle(celles[i][j].X - 2, celles[i][j].Y, 95, 50),
+                         new Rectangle(celles[i][j].X + 45, celles[i][j].Y + 25, 47, 73),
+                         new Rectangle(celles[i][j].X - 3, celles[i][j].Y + 25, 50, 73))
+                        { Top_color = Color.Blue, Left_color = Color.Brown, Right_color = Color.Orange });
+                    }
+
                 }
             }
+
             redCircles.Add(new RedCircle());
             greenCircles.Add(new GreenCircle());
             purpleCircle = new PurpleCircle();
@@ -69,6 +86,13 @@ namespace QBert
             {
                 foreach (Cube cube in l) cube.LoadContent(Content);
             }
+
+            foreach (List<Celle> l in celles)
+            {
+                foreach (Celle cell in l) cell.LoadContent(Content);
+            }
+
+
             foreach (RedCircle circle in redCircles) circle.LoadContent(Content);
             foreach (GreenCircle circle in greenCircles) circle.LoadContent(Content);
             purpleCircle.LoadContent(Content);
@@ -102,10 +126,18 @@ namespace QBert
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
+
+
+            foreach (List<Celle> l in celles)
+            {
+                foreach (Celle cell in l) cell.Draw(_spriteBatch);
+            }
+
             foreach (List<Cube> l in cubes)
             {
                 foreach (Cube cube in l) cube.Draw(_spriteBatch);
             }
+
             foreach (RedCircle circle in redCircles) circle.Draw(_spriteBatch);
             foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
             purpleCircle.Draw(_spriteBatch);

@@ -26,7 +26,7 @@ namespace QBert.Classes
 
         public Snake()
         {
-            position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70);
+            position = new Vector2(Game1.celles[indexY][indexX].Rect_top.X + 20, Game1.celles[indexY][indexX].Rect_top.Y - 70);
         }
         public void LoadContent(ContentManager manager)
         {
@@ -44,7 +44,7 @@ namespace QBert.Classes
                 Follow(playerIndexes);
                 jumpTimer = 60;
             }
-            position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70);
+            position = new Vector2(Game1.celles[indexY][indexX].Rect_top.X + 20, Game1.celles[indexY][indexX].Rect_top.Y - 70);
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
         }
         public void Follow(Vector2 playerIndexes)

@@ -29,7 +29,7 @@ namespace QBert.Classes
 
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 25, Game1.cubes[indexY][indexX].Rect_top.Y + 5);
+            return new Vector2(Game1.celles[indexY][indexX].Rect_top.X + 25, Game1.celles[indexY][indexX].Rect_top.Y + 5);
         }
     }
 }

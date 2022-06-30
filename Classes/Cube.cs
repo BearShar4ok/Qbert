@@ -14,7 +14,6 @@ namespace QBert.Classes
         private Texture2D texture_top;
         private Texture2D texture_right;
         private Texture2D texture_left;
-        private Rectangle rect_cube;
         private Rectangle rect_top;
         private Rectangle rect_right;
         private Rectangle rect_left;
@@ -29,9 +28,8 @@ namespace QBert.Classes
         public Color Right_color { get { return right_color; } set { right_color = value; } }
         public Rectangle Rect_top { get { return rect_top; } set { rect_top = value; } }
 
-        public Cube(Rectangle rect_cube, Rectangle rect_top, Rectangle rect_right, Rectangle rect_left)
+        public Cube(Rectangle rect_top, Rectangle rect_right, Rectangle rect_left)
         {
-            this.rect_cube = rect_cube;
             this.rect_top = rect_top;
             this.rect_left = rect_left;
             this.rect_right = rect_right;
@@ -51,6 +49,14 @@ namespace QBert.Classes
             brush.Draw(texture_top, rect_top, top_color);
             brush.Draw(texture_left, rect_left, Left_color);
             brush.Draw(texture_right, rect_right, Right_color);
+        }
+
+        public void Draw(SpriteBatch brush,Color color)
+        {
+            //brush.Draw(texture_cube, rect_cube, Color.White);
+            brush.Draw(texture_top, rect_top, color);
+            brush.Draw(texture_left, rect_left, color);
+            brush.Draw(texture_right, rect_right, color);
         }
     }
 }
