@@ -32,13 +32,13 @@ namespace QBert
             IsMouseVisible = true;
 
             _graphics.PreferredBackBufferWidth = 1000;
-            _graphics.PreferredBackBufferHeight = 800;
+            _graphics.PreferredBackBufferHeight = 900;
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width;
+            cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width - 8;
             cube_coord_y = _graphics.PreferredBackBufferHeight - 150;
 
 
