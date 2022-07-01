@@ -8,7 +8,7 @@ using System.Text;
 
 namespace QBert.Classes
 {
-    class CoolEnemy : IEnemy
+    class CoolEnemy : Enemy
     {
         public CoolEnemy() : base()
         {

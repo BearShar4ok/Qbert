@@ -6,20 +6,21 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
 namespace QBert.Classes
 {
-    class GreenCircle : IEnemy
+    class RedCircle : Enemy
     {
-        public GreenCircle() : base()
+        public RedCircle() : base()
         {
             position = CountPositionByIndex();
-            sprite_width = 49;
+            sprite_width = 44;
             sprite_height = 30;
-            spriteIndex = 1;
+            spriteIndex = 0;
         }
         public override void LoadContent(ContentManager manager)
         {
-            texture = manager.Load<Texture2D>("greenCircle");
+            texture = manager.Load<Texture2D>("redCircle");
         }
         public override void Draw(SpriteBatch brush)
         {
@@ -28,7 +29,7 @@ namespace QBert.Classes
 
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y + 5);
+            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 25, Game1.Cells[indexY][indexX].Rect_top.Y + 5);
         }
     }
 }

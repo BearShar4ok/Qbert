@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace QBert.Classes
 {
-    class PurpleCircle : IEnemy
+    class PurpleCircle : Enemy
     {
         public PurpleCircle() : base()
         {
