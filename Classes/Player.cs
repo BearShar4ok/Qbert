@@ -53,7 +53,7 @@ namespace QBert.Classes
 
             if (playerJump.NowJumpState == JumpStates.readyToJump)
             {
-                if (Game1.cubes[IndexY - 1][IndexX - 1].Top_color_index != Game1.cubes[IndexY - 1][IndexX - 1].Top_colors.Count - 1 && hasJumped) Game1.cubes[IndexY - 1][IndexX - 1].ChangeTopColor(true);
+                if (indexX != 0 && indexY != 0 && indexX + indexY != 9 && Game1.cubes[IndexY - 1][IndexX - 1].Top_color_index != Game1.cubes[IndexY - 1][IndexX - 1].Top_colors.Count - 1 && hasJumped) Game1.cubes[IndexY - 1][IndexX - 1].ChangeTopColor(true);
                 spriteIndex -= spriteIndex % 2;
             }
             

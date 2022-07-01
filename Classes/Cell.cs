@@ -32,7 +32,7 @@ namespace QBert.Classes
         }
         public void Draw(SpriteBatch brush)
         {
-            brush.Draw(tempDebug, rect_cube, Color.White);
+            //brush.Draw(tempDebug, rect_cube, Color.White);
 
         }
     }
