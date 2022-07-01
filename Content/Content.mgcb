@@ -25,18 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:coolEnemy1.png
 
-#begin coolEnemy1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:coolEnemy1.png
-
 #begin cube.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,6 +37,27 @@
 /processorParam:TextureFormat=Color
 /build:cube.png
 
+#begin font24.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:font24.spritefont
+
+#begin font28.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:font28.spritefont
+
+#begin font32.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:font32.spritefont
+
 #begin futureSnake.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,13 +69,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:futureSnake.png
-
-#begin gameFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:gameFont.spritefont
 
 #begin greenCircle.png
 /importer:TextureImporter

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Text;
 
-namespace QBert.Classes
+namespace QBert.Classes.Enemies
 {
     public abstract class Enemy
     {
