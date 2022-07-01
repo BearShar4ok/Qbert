@@ -22,6 +22,8 @@ namespace QBert.Classes
         public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
         public Vector2 position;
 
+        public float NowTime { get { return nowTime; } }
+
         public void Update(GameTime gametime)
         {
             switch (NowJumpState)
