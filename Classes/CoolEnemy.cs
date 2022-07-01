@@ -10,7 +10,7 @@ namespace QBert.Classes
 {
     class CoolEnemy : IEnemy
     {
-        public CoolEnemy()
+        public CoolEnemy() : base()
         {
             position = CountPositionByIndex();
             sprite_width = 29;
@@ -23,7 +23,7 @@ namespace QBert.Classes
         }
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 25, Game1.cubes[indexY][indexX].Rect_top.Y + 5);
+            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 25, Game1.Cells[indexY][indexX].Rect_top.Y + 5);
         }
     }
 }

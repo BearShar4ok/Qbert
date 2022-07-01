@@ -12,8 +12,8 @@ namespace QBert.Classes
     {
         private Vector2 position;
         private Texture2D texture;
-        private int indexX = 0;
-        private int indexY = 1;
+        private int indexX = 1;
+        private int indexY = 2;
         private Rectangle sourceRectangle;
         private int sprite_width = 50;
         private int sprite_height = 100;
@@ -28,7 +28,7 @@ namespace QBert.Classes
 
         public Snake()
         {
-            position = new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70);
+            position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70);
             snakeJump = new JumpManager();
         }
         public void LoadContent(ContentManager manager)
@@ -54,7 +54,7 @@ namespace QBert.Classes
                 if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
                 {
                     Follow(playerIndexes);
-                    snakeJump.UpdateTargetPosition(new Vector2(Game1.cubes[indexY][indexX].Rect_top.X + 20, Game1.cubes[indexY][indexX].Rect_top.Y - 70), position);
+                    snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position);
                     jumpTimer = 20;
                 }
             }
