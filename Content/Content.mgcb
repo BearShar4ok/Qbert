@@ -49,6 +49,13 @@
 /processorParam:TextureFormat=Color
 /build:futureSnake.png
 
+#begin gameFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:gameFont.spritefont
+
 #begin greenCircle.png
 /importer:TextureImporter
 /processor:TextureProcessor

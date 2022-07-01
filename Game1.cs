@@ -8,8 +8,11 @@ namespace QBert
 {
     public class Game1 : Game
     {
+
+
+
         public static List<List<Cube>> cubes = new List<List<Cube>>();
-        public static List<List<Celle>> celles = new List<List<Celle>>();
+        public static List<List<Cell>> celles = new List<List<Cell>>();
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -42,28 +45,36 @@ namespace QBert
             cube_coord_y = _graphics.PreferredBackBufferHeight - 150;
 
 
-            int amoutCellesInLine = 9;
-            for (int i = 0; amoutCellesInLine >= i; i++)
+            int amoutCellsInLine = 9;
+            for (int i = 0; amoutCellsInLine >= i; i++)
             {
-                celles.Add(new List<Celle>());
+                celles.Add(new List<Cell>());
                 if (i != 0 && i != 9 && i != 8)
                 {
                     cubes.Add(new List<Cube>());
                 }
 
-                for (int j = 0; j <= amoutCellesInLine - i; j++)
+                for (int j = 0; j <= amoutCellsInLine - i; j++)
                 {
-                    celles[i].Add(new Celle(
-                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellesInLine) * j, cube_coord_y - (i) * (cube_height - 27), 100, 100),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellesInLine) * j - 2, cube_coord_y - (i) * (cube_height - 27), 95, 50)
+                    celles[i].Add(new Cell(
+                        new Rectangle(
+                            cube_coord_x + (cube_width / 2 - 2) * (amoutCellsInLine - i) + (cube_width - amoutCellsInLine) * j,
+                            cube_coord_y - (amoutCellsInLine - i) * (cube_height - 27),
+                            100, 100
+                        ),
+                        new Rectangle(
+                            cube_coord_x + (cube_width / 2 - 2) * (amoutCellsInLine - i) + (cube_width - amoutCellsInLine) * j - 2,
+                            cube_coord_y - (amoutCellsInLine - i) * (cube_height - 27),
+                            95, 50
+                        )
                     ));
-                    if (j > 0 && j < amoutCellesInLine - i && i != 0 && i != 9 && i != 8)
+                    if (j > 0 && j < amoutCellsInLine - i && i != 0 && i != 9 && i != 8)
                     {
                         cubes[i - 1].Add(new Cube(
                          new Rectangle(celles[i][j].X - 2, celles[i][j].Y, 95, 50),
                          new Rectangle(celles[i][j].X + 45, celles[i][j].Y + 25, 47, 73),
                          new Rectangle(celles[i][j].X - 3, celles[i][j].Y + 25, 50, 73))
-                        { Top_colors = new List<Color>() { Color.Blue, Color.Red }, Left_color = Color.Brown, Right_color = Color.Orange });
+                        { Top_colors = new List<Color>() { Color.Blue}, Left_color = Color.Brown, Right_color = Color.Orange });
                     }
 
                 }
@@ -89,9 +100,9 @@ namespace QBert
                 foreach (Cube cube in l) cube.LoadContent(Content);
             }
 
-            foreach (List<Celle> l in celles)
+            foreach (List<Cell> l in celles)
             {
-                foreach (Celle cell in l) cell.LoadContent(Content);
+                foreach (Cell cell in l) cell.LoadContent(Content);
             }
 
 
@@ -132,9 +143,9 @@ namespace QBert
 
 
 
-            foreach (List<Celle> l in celles)
+            foreach (List<Cell> l in celles)
             {
-                foreach (Celle cell in l) cell.Draw(_spriteBatch);
+                foreach (Cell cell in l) cell.Draw(_spriteBatch);
             }
 
             foreach (List<Cube> l in cubes)

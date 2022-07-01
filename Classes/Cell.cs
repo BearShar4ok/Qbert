@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace QBert.Classes
 {
-    public class Celle
+    public class Cell
     {
         private Rectangle rect_cube;
         private Rectangle rect_top;
@@ -19,7 +19,7 @@ namespace QBert.Classes
 
         public Rectangle Rect_top { get { return rect_top; } set { rect_top = value; } }
 
-        public Celle(Rectangle rect_cube, Rectangle rect_top)
+        public Cell(Rectangle rect_cube, Rectangle rect_top)
         {
             this.rect_top = rect_top;
             this.rect_cube = rect_cube;

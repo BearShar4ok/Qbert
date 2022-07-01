@@ -11,6 +11,10 @@ namespace QBert.Classes
 {
     class Player
     {
+
+        private SpriteFont font;
+        private int score = 0;
+
         private Vector2 position;
         private Vector2 targetPosition;
         private Texture2D texture;
@@ -39,6 +43,7 @@ namespace QBert.Classes
         {
             texture = manager.Load<Texture2D>("Qbert");
             rectangleOfPlayer = new Rectangle((int)position.X, (int)position.Y, sprite_width, sprite_height);
+            font = manager.Load<SpriteFont>("gameFont");
         }
 
         public void Update(GameTime gametime)
@@ -68,6 +73,7 @@ namespace QBert.Classes
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
+                    score++;
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
@@ -75,16 +81,18 @@ namespace QBert.Classes
                     playerJump.UpdateTargetPosition(targetPosition, position);
                     if (!hasJumped) hasJumped = true;
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.A))
+                else if (Keyboard.GetState().IsKeyDown(Keys.Z))
                 {
+                    score++;
                     spriteIndex = 7;
                     indexY--;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
                     playerJump.UpdateTargetPosition(targetPosition, position);
                     if (!hasJumped) hasJumped = true;
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.D))
+                else if (Keyboard.GetState().IsKeyDown(Keys.C))
                 {
+                    score++;
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
@@ -94,6 +102,7 @@ namespace QBert.Classes
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
+                    score++;
                     spriteIndex = 1;
                     indexY++;
                     targetPosition = new Vector2(Game1.cubes[IndexY][IndexX].Rect_top.X + 25, Game1.cubes[IndexY][IndexX].Rect_top.Y - 20);
@@ -105,6 +114,7 @@ namespace QBert.Classes
         public void Draw(SpriteBatch brush)
         {
             brush.Draw(texture, position, rectangleOfPlayer, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            brush.DrawString(font, score.ToString(), Vector2.Zero, Color.Red);
         }
     }
 }
