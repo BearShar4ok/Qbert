@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace QBert.Classes
+namespace QBert.Classes.Enemies
 {
     class PurpleCircle : Enemy
     {

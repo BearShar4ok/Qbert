@@ -12,6 +12,7 @@ namespace QBert.Classes.UI
     {
         private SpriteFont spriteFont;
         private Color defaultColor;
+        private string fontName;
         public Vector2 Position { get; set; }
         public string Text { get; set; }
         public Color Color { get; set; }
@@ -22,9 +23,11 @@ namespace QBert.Classes.UI
             Text = "label";
             Color = Color.Orange;
             defaultColor = Color;
+            fontName = "font28";
         }
-        public Label(string text, Vector2 pos, Color color)
+        public Label(string text, Vector2 pos, Color color, string fontName)
         {
+            this.fontName = fontName;
             Position = pos;
             Text = text;
             Color = color;
@@ -36,7 +39,7 @@ namespace QBert.Classes.UI
         }
         public void LoadContent(ContentManager manager)
         {
-            spriteFont = manager.Load<SpriteFont>("GameFont");
+            spriteFont = manager.Load<SpriteFont>(fontName);
         }
         public void Draw(SpriteBatch brush)
         {

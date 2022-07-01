@@ -11,6 +11,8 @@ namespace QBert.Classes
 {
     class Player
     {
+        private int score = 0;
+
         private Vector2 position;
         private Vector2 targetPosition;
         private Texture2D texture;
@@ -23,9 +25,11 @@ namespace QBert.Classes
         private int sprite_height = 50;
         private int screenHeight;
         private bool hasJumped = false;
+        private bool hasChangedCubeColor = false;
         public Vector2 Position { get { return position; } set { position = value; } }
-        public int IndexX { get { return indexX; } }
-        public int IndexY { get { return indexY; } }
+        public int Score { get { return score; } set { score = value; } }
+        public int IndexX { get { return indexX; } set { indexX = value; } }
+        public int IndexY { get { return indexY; } set { indexY = value; } }
         public bool IsPlayerLive { get; private set; } = true;
         public JumpManager playerJump { get; private set; }
 
@@ -56,7 +60,12 @@ namespace QBert.Classes
 
             if (playerJump.NowJumpState == JumpStates.readyToJump)
             {
-                if (indexX != 0 && indexY != 0 && indexX + indexY != 9 && Game1.cubes[IndexY - 1][IndexX - 1].Top_color_index != Game1.cubes[IndexY - 1][IndexX - 1].Top_colors.Count - 1 && hasJumped) Game1.cubes[IndexY - 1][IndexX - 1].ChangeTopColor(true);
+                if (indexX != 0 && indexY != 0 && indexX + indexY != 9 && Game1.cubes[IndexY - 1][IndexX - 1].Top_color_index != Game1.cubes[IndexY - 1][IndexX - 1].Top_colors.Count - 1 && hasJumped && !hasChangedCubeColor)
+                {
+                    Game1.cubes[IndexY - 1][IndexX - 1].ChangeTopColor(true);
+                    score += 25;
+                    hasChangedCubeColor = true;
+                }
                 spriteIndex -= spriteIndex % 2;
             }
 
@@ -71,6 +80,7 @@ namespace QBert.Classes
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
+                    hasChangedCubeColor = false;
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
@@ -80,6 +90,7 @@ namespace QBert.Classes
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Z))
                 {
+                    hasChangedCubeColor = false;
                     spriteIndex = 7;
                     indexY--;
                     targetPosition = ChechFallTraecktory(false);
@@ -88,6 +99,7 @@ namespace QBert.Classes
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.C))
                 {
+                    hasChangedCubeColor = false;
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
@@ -97,6 +109,7 @@ namespace QBert.Classes
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
+                    hasChangedCubeColor = false;
                     spriteIndex = 1;
                     indexY++;
                     targetPosition = ChechFallTraecktory(true);
