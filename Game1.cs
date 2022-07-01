@@ -68,7 +68,7 @@ namespace QBert
             _graphics.IsFullScreen = true;
 
             // 1000 w  900 h
-            player = new Player(playerStartPosition, 1, 7); // 952 399
+            player = new Player(playerStartPosition, 1, 7, _graphics.PreferredBackBufferHeight); // 952 399
             HUD.LeftBorderX = _graphics.PreferredBackBufferWidth / 2 - 500;
             HUD.TopBorderY = _graphics.PreferredBackBufferHeight / 2 - 450;
             HUD.Init();
@@ -92,19 +92,19 @@ namespace QBert
                 for (int j = 0; j <= amountCellsInLine - i; j++)
                 {
                     Cell cell = new Cell(
-                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellsInLine) * j, cube_coord_y - (i) * (cube_height - 27), 100, 100),
-                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellsInLine) * j - 2, cube_coord_y - (i) * (cube_height - 27), 95, 50)
+                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amountCellsInLine) * j, cube_coord_y - (i) * (cube_height - 27), 100, 100),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amountCellsInLine) * j - 2, cube_coord_y - (i) * (cube_height - 27), 95, 50)
                     );
                     Cells[i].Add(cell);
 
                     Cube cube;
-                    if (j > 0 && j < amoutCellsInLine - i && i != 0 && i != 9 && i != 8)
+                    if (j > 0 && j < amountCellsInLine - i && i != 0 && i != 9 && i != 8)
                     {
                         cube = new Cube(
                          new Rectangle(Cells[i][j].X - 2, Cells[i][j].Y, 95, 50),
                          new Rectangle(Cells[i][j].X + 45, Cells[i][j].Y + 25, 47, 73),
                          new Rectangle(Cells[i][j].X - 3, Cells[i][j].Y + 25, 50, 73))
-                        { Top_colors = colors[round][0], Left_color = colors[round][1][0], Right_color = colors[round][2][0] });
+                        { Top_colors = colors[round][0], Left_color = colors[round][1][0], Right_color = colors[round][2][0] };
                         cubes[i - 1].Add(cube);
                         cell.objectStatechanged(cube);
                     }
