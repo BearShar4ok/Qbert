@@ -13,9 +13,13 @@ namespace QBert.Classes
         private Rectangle rect_cube;
         private Rectangle rect_top;
         private Texture2D tempDebug;
-
+        
+        public object objectContains { get; private set; }
+        public CellStates CellState { get; private set; } = CellStates.air;
         public int X { get; private set; }
         public int Y { get; private set; }
+
+        public Action<object> objectStatechanged;
 
         public Rectangle Rect_top { get { return rect_top; } set { rect_top = value; } }
 
@@ -25,6 +29,15 @@ namespace QBert.Classes
             this.rect_cube = rect_cube;
             X = rect_cube.X;
             Y = rect_cube.Y;
+            objectContains = null;
+            objectStatechanged = (obj) => { 
+                objectContains = obj;
+                if (obj is Cube)
+                {
+                    CellState = CellStates.cube;
+                }
+                
+            }; 
         }
         public void LoadContent(ContentManager Content)
         {

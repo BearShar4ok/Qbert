@@ -53,19 +53,23 @@ namespace QBert
 
                 for (int j = 0; j <= amoutCellsInLine - i; j++)
                 {
-                    Cells[i].Add(new Cell(
+                    Cell cell = new Cell(
                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellsInLine) * j, cube_coord_y - (i) * (cube_height - 27), 100, 100),
                          new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amoutCellsInLine) * j - 2, cube_coord_y - (i) * (cube_height - 27), 95, 50)
-                    ));
+                    );
+                    Cells[i].Add(cell);
+
+                    Cube cube;
                     if (j > 0 && j < amoutCellsInLine - i && i != 0 && i != 9 && i != 8)
                     {
-                        cubes[i - 1].Add(new Cube(
+                        cube = new Cube(
                          new Rectangle(Cells[i][j].X - 2, Cells[i][j].Y, 95, 50),
                          new Rectangle(Cells[i][j].X + 45, Cells[i][j].Y + 25, 47, 73),
                          new Rectangle(Cells[i][j].X - 3, Cells[i][j].Y + 25, 50, 73))
-                        { Top_colors = new List<Color>() { Color.Blue, Color.Red }, Left_color = Color.Brown, Right_color = Color.Orange });
+                        { Top_colors = new List<Color>() { Color.Blue, Color.Red }, Left_color = Color.Brown, Right_color = Color.Orange };
+                        cubes[i - 1].Add(cube);
+                        cell.objectStatechanged(cube);
                     }
-
                 }
             }
 
@@ -75,7 +79,7 @@ namespace QBert
             snake = new Snake();
             coolEnemy = new CoolEnemy();
 
-            player = new Player(new Vector2(cubes[6][0].Rect_top.X + 25, cubes[6][0].Rect_top.Y - 20), 1, 7);
+            player = new Player(new Vector2(cubes[6][0].Rect_top.X + 25, cubes[6][0].Rect_top.Y - 20), 1, 7, _graphics.PreferredBackBufferHeight);
             base.Initialize();
         }
 
@@ -130,8 +134,40 @@ namespace QBert
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
+            if (!player.IsPlayerLive)
+            {
+                if (player.playerJump.IsFall)
+                {
+                    player.Draw(_spriteBatch);
+                    DrawCubes();
+                    foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                }
+                else
+                {
+                    DrawCubes();
+                    foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                    player.Draw(_spriteBatch);
+                }
+                
+            }
+            else
+            {
+                DrawCubes();
+                foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                player.Draw(_spriteBatch);
+            }
 
+            foreach (RedCircle circle in redCircles) circle.Draw(_spriteBatch);
+            purpleCircle.Draw(_spriteBatch);
+            snake.Draw(_spriteBatch);
+            coolEnemy.Draw(_spriteBatch);
 
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+        private void DrawCubes()
+        {
             foreach (List<Cell> l in Cells)
             {
                 foreach (Cell cell in l) cell.Draw(_spriteBatch);
@@ -141,18 +177,6 @@ namespace QBert
             {
                 foreach (Cube cube in l) cube.Draw(_spriteBatch);
             }
-
-            foreach (RedCircle circle in redCircles) circle.Draw(_spriteBatch);
-            foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
-            purpleCircle.Draw(_spriteBatch);
-
-            player.Draw(_spriteBatch);
-            snake.Draw(_spriteBatch);
-            coolEnemy.Draw(_spriteBatch);
-
-            _spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }

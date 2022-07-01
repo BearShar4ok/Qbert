@@ -12,17 +12,23 @@ namespace QBert.Classes
 {
     public class JumpManager
     {
+        private string debugPlayer;
+
         private Vector2 targetPos;
         private Vector2 startPos;
         private float timeToEnd = 0.4f;
         private float nowTime;
 
-        private const float g = 2000f;
+        private  float g = 2000f;
 
         public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
         public Vector2 position;
+        public Vector2 prevPosition;
 
         public float NowTime { get { return nowTime; } }
+        public float TimeToEnd { get { return timeToEnd; } set { timeToEnd = value; } }
+        public float G { get { return g; } set { g = value; } }
+        public bool IsFall { get; private set; } = false;
 
         public void Update(GameTime gametime)
         {
@@ -37,10 +43,10 @@ namespace QBert.Classes
                     break;
             }
         }
-        public void UpdateTargetPosition(Vector2 targetPos, Vector2 startPos)
+        public void UpdateTargetPosition(Vector2 targetPos, Vector2 startPos, string debug="q")
         {
             this.targetPos = targetPos;
-
+            debugPlayer = debug;
             this.startPos = startPos;
             position = startPos;
             NowJumpState = JumpStates.inJump;
@@ -49,6 +55,8 @@ namespace QBert.Classes
         {
             nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
 
+            
+            
 
             position.X = startPos.X + (targetPos.X - startPos.X) * nowTime / timeToEnd;
             if (nowTime <= timeToEnd)
@@ -57,9 +65,16 @@ namespace QBert.Classes
             }
             else
             {
+                timeToEnd = 0.4f;
+                g = 2000f;
                 nowTime = 0;
                 NowJumpState = JumpStates.readyToJump;
             }
+            if (debugPlayer == "Player")
+            {
+                IsFall = prevPosition.Y < position.Y;
+            }
+            prevPosition = position;
         }
     }
 }

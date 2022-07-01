@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QBert.Classes
+﻿namespace QBert.Classes
 {
     public enum JumpStates { readyToJump, inJump }
+    public enum CellStates { cube, air, enemy, player, platform }
 }
