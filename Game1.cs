@@ -21,25 +21,25 @@ namespace QBert
         {
             new List<List<Color>>()
             {
-                new List<Color>() { new Color(0, 69, 222), new Color(239, 222, 119), /*new Color(33, 185, 49)*/ },
+                new List<Color>() { new Color(0, 69, 222), new Color(239, 222, 119), new Color(33, 185, 49) },
                 new List<Color>() { new Color(102, 49, 0) },
                 new List<Color>() { new Color(255, 119, 33) }
             },
             new List<List<Color>>()
             {
-                new List<Color>() { new Color(169, 185, 15), new Color(0, 102, 239), /*new Color(153, 0, 102)*/ },
+                new List<Color>() { new Color(169, 185, 15), new Color(0, 102, 239), new Color(153, 0, 102) },
                 new List<Color>() { new Color(119, 135, 135) },
                 new List<Color>() { new Color(15, 15, 153) }
             },
             new List<List<Color>>()
             {
-                new List<Color>() { new Color(135, 0, 119), new Color(0, 49, 153), /*new Color(33, 135, 206)*/ },
+                new List<Color>() { new Color(135, 0, 119), new Color(0, 49, 153), new Color(33, 135, 206) },
                 new List<Color>() { new Color(185, 185, 33) },
                 new List<Color>() { new Color(185, 49, 49) }
             },
             new List<List<Color>>()
             {
-                new List<Color>() { new Color(0, 169, 222), new Color(69, 102, 85), /*new Color(255, 85, 85)*/ },
+                new List<Color>() { new Color(0, 169, 222), new Color(69, 102, 85), new Color(255, 85, 85) },
                 new List<Color>() { new Color(185, 185, 33) },
                 new List<Color>() { new Color(0, 49, 153) }
             }
@@ -117,7 +117,7 @@ namespace QBert
             }
 
             player = new Player(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
-            platforms = new List<Platform>() { new Platform(0, 4) };
+            platforms = new List<Platform>() { new Platform(0, 4), new Platform(5, 4) };
 
             redCircles.Add(new RedCircle());
             greenCircles.Add(new GreenCircle());

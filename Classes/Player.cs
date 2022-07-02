@@ -87,13 +87,17 @@ namespace QBert.Classes
 
             if (Game1.Cells[IndexY][IndexX].CellState == CellStates.platform && playerJump.NowJumpState == JumpStates.readyToJump && PlayerState != PlayerStates.onPlatform)
             {
+                nowTimer = 0;
                 Game1.PlayerSteppedOnPlatform();
                 //Game1.Cells[IndexY][IndexX].objectStatechanged(7632);
                 startPosition = position;
                 PlayerState = PlayerStates.onPlatform;
             }
 
-            if (PlayerState == PlayerStates.onPlatform && position.Y > topPosition.Y && playerJump.NowJumpState != JumpStates.freeFall) MoveSlowly(gametime);
+            if (PlayerState == PlayerStates.onPlatform && position.Y > topPosition.Y && playerJump.NowJumpState != JumpStates.freeFall)
+            {
+                MoveSlowly(gametime);
+            }
 
 
             if (Keyboard.GetState() == prevState)
@@ -180,7 +184,7 @@ namespace QBert.Classes
             return targetPos;
         }
 
-        public void StartFalling()
+        public void StartFalling()                          
         {
             PlayerState = PlayerStates.notOnPlatform;
             playerJump.UpdateTargetPosition(new Vector2(Game1.Cells[7][1].Rect_top.X + magicConstX, Game1.Cells[7][1].Rect_top.Y + magicConstY),
