@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using QBert.Classes;
 using QBert.Classes.Enemies;
 using QBert.Classes.UI;
+using System;
 
 namespace QBert
 {
@@ -12,6 +13,9 @@ namespace QBert
     {
         public static List<List<Cube>> cubes = new List<List<Cube>>();
         public static List<List<Cell>> Cells = new List<List<Cell>>();
+
+        public static Action PlayerSteppedOnPlatform = MakePlatformMove;
+        public static Action PlayerDroppedFromPlatform = MakePlatformEndJourney;
 
         private static List<List<List<Color>>> colors = new List<List<List<Color>>>()
         {
@@ -54,7 +58,8 @@ namespace QBert
         private CoolEnemy coolEnemy;
         private List<GreenCircle> greenCircles = new List<GreenCircle>();
         private Snake snake;
-        private Player player;
+        private Platform platform;
+        private static Player player;
         private Vector2 playerStartPosition = new Vector2(/*cubes[6][0].Rect_top.X + 25*/ 952, /*cubes[6][0].Rect_top.Y - 20*/ 399);
 
         public Game1()
@@ -62,10 +67,9 @@ namespace QBert
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.IsFullScreen = true;
+            //_graphics.IsFullScreen = true;
 
             // 1000 w  900 h
             player = new Player(playerStartPosition, 1, 7, _graphics.PreferredBackBufferHeight); // 952 399
@@ -111,6 +115,8 @@ namespace QBert
                 }
             }
 
+            platform = new Platform(0, 4);
+
             redCircles.Add(new RedCircle());
             greenCircles.Add(new GreenCircle());
             purpleCircle = new PurpleCircle();
@@ -141,6 +147,7 @@ namespace QBert
             purpleCircle.LoadContent(Content);
             snake.LoadContent(Content);
             coolEnemy.LoadContent(Content);
+            platform.LoadContent(Content);
 
             player.LoadContent(Content);
 
@@ -156,6 +163,7 @@ namespace QBert
 
 
             player.Update(gameTime);
+            platform.Update(gameTime);
 
             foreach (RedCircle circle in redCircles) circle.Update(gameTime);
             foreach (GreenCircle circle in greenCircles) circle.Update(gameTime);
@@ -177,6 +185,7 @@ namespace QBert
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
+            platform.Draw(_spriteBatch);
             if (!player.IsPlayerLive)
             {
                 if (player.playerJump.IsFall)
@@ -251,6 +260,17 @@ namespace QBert
             {
                 foreach (Cube cube in l) cube.Draw(_spriteBatch);
             }
+        }
+
+        private static void MakePlatformMove()
+        {
+            (Cells[player.IndexY][player.IndexX].objectContains as Platform).IsGoing = true;
+            player.MaxMoveTime = (Cells[player.IndexY][player.IndexX].objectContains as Platform).MaxMoveTime;
+        }
+
+        private static void MakePlatformEndJourney()
+        {
+            
         }
     }
 }

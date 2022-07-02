@@ -26,11 +26,18 @@ namespace QBert.Classes
         private int screenHeight;
         private bool hasJumped = false;
         private bool hasChangedCubeColor = false;
+        private float nowTimer = 0;
+        private float maxMoveTime;
+        private Vector2 startPosition;
+        private Vector2 topPosition = new Vector2(959, 253);
+
         public Vector2 Position { get { return position; } set { position = value; } }
         public int Score { get { return score; } set { score = value; } }
         public int IndexX { get { return indexX; } set { indexX = value; } }
         public int IndexY { get { return indexY; } set { indexY = value; } }
+        public float MaxMoveTime { get { return maxMoveTime; } set { maxMoveTime = value; } }
         public bool IsPlayerLive { get; private set; } = true;
+        public PlayerStates PlayerState { get; set; } = PlayerStates.notOnPlatform;
         public JumpManager playerJump { get; private set; }
 
         public Player(Vector2 position, int indexX, int indexY, int screenHeight)
@@ -69,6 +76,16 @@ namespace QBert.Classes
                 spriteIndex -= spriteIndex % 2;
             }
 
+            if (Game1.Cells[IndexY][IndexX].CellState == CellStates.platform && playerJump.NowJumpState == JumpStates.readyToJump && PlayerState != PlayerStates.onPlatform)
+            {
+                Game1.PlayerSteppedOnPlatform();
+                //Game1.Cells[IndexY][IndexX].objectStatechanged(7632);
+                startPosition = position;
+                PlayerState = PlayerStates.onPlatform;
+            }
+
+            if (PlayerState == PlayerStates.onPlatform && position.Y > topPosition.Y) MoveSlowly(gametime);
+
 
             if (Keyboard.GetState() == prevState)
                 return;
@@ -76,7 +93,7 @@ namespace QBert.Classes
             {
                 prevState = Keyboard.GetState();
             }
-            if (playerJump.NowJumpState == JumpStates.readyToJump)
+            if (playerJump.NowJumpState == JumpStates.readyToJump && PlayerState == PlayerStates.notOnPlatform)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
@@ -84,6 +101,7 @@ namespace QBert.Classes
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(false);
                     playerJump.UpdateTargetPosition(targetPosition, position, "Player");
                     if (!hasJumped) hasJumped = true;
@@ -93,6 +111,7 @@ namespace QBert.Classes
                     hasChangedCubeColor = false;
                     spriteIndex = 7;
                     indexY--;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(false);
                     playerJump.UpdateTargetPosition(targetPosition, position, "Player");
                     if (!hasJumped) hasJumped = true;
@@ -103,6 +122,7 @@ namespace QBert.Classes
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(true);
                     playerJump.UpdateTargetPosition(targetPosition, position, "Player");
                     if (!hasJumped) hasJumped = true;
@@ -112,6 +132,7 @@ namespace QBert.Classes
                     hasChangedCubeColor = false;
                     spriteIndex = 1;
                     indexY++;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(true);
                     playerJump.UpdateTargetPosition(targetPosition, position, "Player");
                     if (!hasJumped) hasJumped = true;
@@ -141,6 +162,15 @@ namespace QBert.Classes
                 IsPlayerLive = false;
             }
             return targetPos;
+        }
+
+
+        private void MoveSlowly(GameTime gameTime)
+        {
+            // 934 273
+            nowTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.X = startPosition.X + ((topPosition.X - startPosition.X) * nowTimer / maxMoveTime);
+            position.Y = startPosition.Y + ((topPosition.Y - startPosition.Y) * nowTimer / maxMoveTime);
         }
     }
 }

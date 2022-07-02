@@ -23,20 +23,24 @@ namespace QBert.Classes
 
         public Rectangle Rect_top { get { return rect_top; } set { rect_top = value; } }
 
-        public Cell(Rectangle rect_cube, Rectangle rect_top) : base()
+        public Cell(Rectangle rect_cube, Rectangle rect_top)
         {
             this.rect_top = rect_top;
             this.rect_cube = rect_cube;
             X = rect_cube.X;
             Y = rect_cube.Y;
             objectContains = null;
-            objectStatechanged = (obj) => { 
+            objectStatechanged = (obj) => {
+                CellState = CellStates.air;
                 objectContains = obj;
                 if (obj is Cube)
                 {
                     CellState = CellStates.cube;
                 }
-                
+                if (obj is Platform)
+                {
+                    CellState = CellStates.platform;
+                }
             }; 
         }
         public void LoadContent(ContentManager Content)
@@ -46,7 +50,6 @@ namespace QBert.Classes
         public void Draw(SpriteBatch brush)
         {
             //brush.Draw(tempDebug, rect_cube, Color.White);
-
         }
     }
 }

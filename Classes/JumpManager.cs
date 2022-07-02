@@ -55,9 +55,6 @@ namespace QBert.Classes
         {
             nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            
-            
-
             position.X = startPos.X + (targetPos.X - startPos.X) * nowTime / timeToEnd;
             if (nowTime <= timeToEnd)
             {
