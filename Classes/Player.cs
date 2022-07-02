@@ -26,17 +26,26 @@ namespace QBert.Classes
         private int screenHeight;
         private bool hasJumped = false;
         private bool hasChangedCubeColor = false;
+        private float nowTimer = 0;
+        private float maxMoveTime;
+        private Vector2 startPosition;
+        private const int magicConstX = 15;
+        private const int magicConstY = -15;
+        private Vector2 topPosition = new Vector2(Game1.Cells[9][0].Rect_top.X + 25, Game1.Cells[9][0].Rect_top.Y - 20);             // 934 273
+
         public Vector2 Position { get { return position; } set { position = value; } }
         public int Score { get { return score; } set { score = value; } }
         public int IndexX { get { return indexX; } set { indexX = value; } }
         public int IndexY { get { return indexY; } set { indexY = value; } }
+        public float MaxMoveTime { get { return maxMoveTime; } set { maxMoveTime = value; } }
         public bool IsPlayerLive { get; private set; } = true;
+        public PlayerStates PlayerState { get; set; } = PlayerStates.notOnPlatform;
         public bool IsDyingDown { get; private set; } = false;
         public JumpManager playerJump { get; private set; }
 
-        public Player(Vector2 position, int indexX, int indexY, int screenHeight)
+        public Player(int indexX, int indexY, int screenHeight)
         {
-            this.position = position;
+            position = new Vector2(Game1.Cells[7][1].Rect_top.X + magicConstX, Game1.Cells[7][1].Rect_top.Y + magicConstY);
             this.indexX = indexX;
             this.indexY = indexY;
             playerJump = new JumpManager();
@@ -57,6 +66,12 @@ namespace QBert.Classes
                 position = playerJump.position;
             }
 
+            if (playerJump.NowJumpState == JumpStates.freeFall)
+            {
+                playerJump.Update(gametime);
+                position = playerJump.position;
+            }
+
             rectangleOfPlayer = new Rectangle(spriteIndex != 7 ? spriteIndex * sprite_width : 349, 0, spriteIndex != 1 ? sprite_width : 48, sprite_height);
 
             if (playerJump.NowJumpState == JumpStates.readyToJump)
@@ -70,6 +85,16 @@ namespace QBert.Classes
                 spriteIndex -= spriteIndex % 2;
             }
 
+            if (Game1.Cells[IndexY][IndexX].CellState == CellStates.platform && playerJump.NowJumpState == JumpStates.readyToJump && PlayerState != PlayerStates.onPlatform)
+            {
+                Game1.PlayerSteppedOnPlatform();
+                //Game1.Cells[IndexY][IndexX].objectStatechanged(7632);
+                startPosition = position;
+                PlayerState = PlayerStates.onPlatform;
+            }
+
+            if (PlayerState == PlayerStates.onPlatform && position.Y > topPosition.Y && playerJump.NowJumpState != JumpStates.freeFall) MoveSlowly(gametime);
+
 
             if (Keyboard.GetState() == prevState)
                 return;
@@ -77,7 +102,7 @@ namespace QBert.Classes
             {
                 prevState = Keyboard.GetState();
             }
-            if (playerJump.NowJumpState == JumpStates.readyToJump)
+            if (playerJump.NowJumpState == JumpStates.readyToJump && PlayerState == PlayerStates.notOnPlatform)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
@@ -86,8 +111,9 @@ namespace QBert.Classes
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(false);
-                    playerJump.UpdateTargetPosition(targetPosition, position, "Player");
+                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
                     if (!hasJumped) hasJumped = true;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Z))
@@ -96,8 +122,9 @@ namespace QBert.Classes
                     IsDyingDown = true;
                     spriteIndex = 7;
                     indexY--;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(false);
-                    playerJump.UpdateTargetPosition(targetPosition, position, "Player");
+                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
                     if (!hasJumped) hasJumped = true;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.C))
@@ -107,8 +134,9 @@ namespace QBert.Classes
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(true);
-                    playerJump.UpdateTargetPosition(targetPosition, position, "Player");
+                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
                     if (!hasJumped) hasJumped = true;
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
@@ -117,8 +145,9 @@ namespace QBert.Classes
                     IsDyingDown = false;
                     spriteIndex = 1;
                     indexY++;
+                    playerJump.NowJumpState = JumpStates.inJump;
                     targetPosition = ChechFallTraecktory(true);
-                    playerJump.UpdateTargetPosition(targetPosition, position, "Player");
+                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
                     if (!hasJumped) hasJumped = true;
                 }
             }
@@ -137,7 +166,7 @@ namespace QBert.Classes
             Vector2 targetPos;
             if (Game1.Cells[IndexY][IndexX].CellState != CellStates.air)
             {
-                targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + 25, Game1.Cells[IndexY][IndexX].Rect_top.Y - 20);
+                targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + magicConstX, Game1.Cells[IndexY][IndexX].Rect_top.Y + magicConstY);
             }
             else
             {
@@ -149,6 +178,23 @@ namespace QBert.Classes
                 IsPlayerLive = false;
             }
             return targetPos;
+        }
+
+        public void StartFalling()
+        {
+            PlayerState = PlayerStates.notOnPlatform;
+            playerJump.UpdateTargetPosition(new Vector2(Game1.Cells[7][1].Rect_top.X + magicConstX, Game1.Cells[7][1].Rect_top.Y + magicConstY),
+                position, JumpStates.freeFall, "Player");
+            indexX = 1;
+            indexY = 7;
+        }
+
+        private void MoveSlowly(GameTime gameTime)
+        {
+            // 934 273
+            nowTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.X = startPosition.X + ((topPosition.X - startPosition.X) * nowTimer / maxMoveTime);
+            position.Y = startPosition.Y + ((topPosition.Y - startPosition.Y) * nowTimer / maxMoveTime);
         }
     }
 }

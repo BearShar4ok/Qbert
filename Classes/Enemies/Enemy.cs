@@ -65,14 +65,14 @@ namespace QBert.Classes.Enemies
                         else if (indexY == 0 && !(this is PurpleCircle))
                         {
                             circleJump.TimeToEnd = 0.8f;
-                            circleJump.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position);
+                            circleJump.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
                         }
                         else
                         {
 
-                            circleJump.UpdateTargetPosition(CountPositionByIndex(), position);
+                            circleJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
                         }
