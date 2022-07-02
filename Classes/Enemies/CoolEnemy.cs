@@ -10,17 +10,18 @@ namespace QBert.Classes.Enemies
 {
     class CoolEnemy : Enemy
     {
+        private bool hasColoredCube = false;
         public CoolEnemy() : base()
         {
             position = CountPositionByIndex();
-            sprite_width = 29;
-            sprite_height = 30;
+            sprite_width = 38;
+            sprite_height = 40;
             spriteIndex = 4;
             textureName = "coolEnemy1";
         }
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 35, Game1.Cells[indexY][indexX].Rect_top.Y + 10);
+            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 30, Game1.Cells[indexY][indexX].Rect_top.Y);
         }
 
         public override void Update(GameTime gametime,Vector2 playerIndexes)
@@ -35,6 +36,12 @@ namespace QBert.Classes.Enemies
 
             if (circleJump.NowJumpState == JumpStates.readyToJump)
             {
+                if (!hasColoredCube)
+                {
+                    Game1.cubes[indexY - 1][indexX - 1].ChangeTopColor(true);
+                    hasColoredCube = true;
+                }
+
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
@@ -45,6 +52,7 @@ namespace QBert.Classes.Enemies
                     indexX += direction;
                     circleJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                     jumpTimer = 20;
+                    hasColoredCube = false;
                 }
             }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
