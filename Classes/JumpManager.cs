@@ -27,7 +27,6 @@ namespace QBert.Classes
 
         public float NowTime { get { return nowTime; } }
         public float TimeToEnd { get { return timeToEnd; } set { timeToEnd = value; } }
-        public float G { get { return g; } set { g = value; } }
         public bool IsFall { get; private set; } = false;
 
         public void Update(GameTime gametime)

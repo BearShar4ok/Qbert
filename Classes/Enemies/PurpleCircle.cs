@@ -16,10 +16,7 @@ namespace QBert.Classes.Enemies
             sprite_width = 39;
             sprite_height = 32;
             spriteIndex = 1;
-        }
-        public override void LoadContent(ContentManager manager)
-        {
-            texture = manager.Load<Texture2D>("futureSnake");
+            textureName = "futureSnake";
         }
 
         public override Vector2 CountPositionByIndex()

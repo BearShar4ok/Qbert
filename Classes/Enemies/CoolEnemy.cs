@@ -16,17 +16,14 @@ namespace QBert.Classes.Enemies
             sprite_width = 29;
             sprite_height = 30;
             spriteIndex = 4;
-        }
-        public override void LoadContent(ContentManager manager)
-        {
-            texture = manager.Load<Texture2D>("coolEnemy1");
+            textureName = "coolEnemy1";
         }
         public override Vector2 CountPositionByIndex()
         {
             return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 35, Game1.Cells[indexY][indexX].Rect_top.Y + 10);
         }
 
-        public override void Update(GameTime gametime)
+        public override void Update(GameTime gametime,Vector2 playerIndexes)
         {
             if (circleJump != null && circleJump.NowJumpState == JumpStates.inJump)
             {

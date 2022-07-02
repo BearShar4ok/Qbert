@@ -53,15 +53,16 @@ namespace QBert
         private int cube_coord_y;
         private int cube_width = 100;
         private int cube_height = 100;
-        private List<RedCircle> redCircles = new List<RedCircle>();
-        private PurpleCircle purpleCircle;
-        private CoolEnemy coolEnemy;
-        private List<GreenCircle> greenCircles = new List<GreenCircle>();
-        private Snake snake;
+        //private List<RedCircle> redCircles = new List<RedCircle>();
+        //private PurpleCircle purpleCircle;
+        //private CoolEnemy coolEnemy;
+        //private List<GreenCircle> greenCircles = new List<GreenCircle>();
+       // private Snake snake;
         private static Player player;
         private Texture2D arcadeBackground;
         private Texture2D arcadeBackgroundFooter;
         private static List<Platform> platforms;
+        private static List<Enemy> enemies;
         private Texture2D arcadeBackgroundSide;
 
         public Game1()
@@ -115,15 +116,15 @@ namespace QBert
                     }
                 }
             }
-
+            enemies = new List<Enemy>();
             player = new Player(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
-            platforms = new List<Platform>() { new Platform(0, 4) };
+            platforms = new List<Platform>() { new Platform(0, 4), new Platform(4, 5) };
 
-            redCircles.Add(new RedCircle());
-            greenCircles.Add(new GreenCircle());
-            purpleCircle = new PurpleCircle();
-            snake = new Snake();
-            coolEnemy = new CoolEnemy();
+            enemies.Add(new RedCircle());
+            enemies.Add(new GreenCircle());
+            enemies.Add(new PurpleCircle());
+            enemies.Add(new Snake());
+            enemies.Add(new CoolEnemy());
 
             base.Initialize();
         }
@@ -144,11 +145,10 @@ namespace QBert
             }
 
 
-            foreach (RedCircle circle in redCircles) circle.LoadContent(Content);
-            foreach (GreenCircle circle in greenCircles) circle.LoadContent(Content);
-            purpleCircle.LoadContent(Content);
-            snake.LoadContent(Content);
-            coolEnemy.LoadContent(Content);
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.LoadContent(Content);
+            }
 
             foreach (Platform platform in platforms) platform.LoadContent(Content);
 
@@ -165,7 +165,14 @@ namespace QBert
                 Exit();
 
             // TODO: Add your update logic here
-
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (!enemies[i].IsAlive)
+                {
+                    enemies.RemoveAt(i);
+                    i--;
+                }
+            }
 
             player.Update(gameTime);
 
@@ -174,11 +181,21 @@ namespace QBert
                 platforms[i].Update(gameTime);
             }
 
-            foreach (RedCircle circle in redCircles) circle.Update(gameTime);
-            foreach (GreenCircle circle in greenCircles) circle.Update(gameTime);
-            purpleCircle.Update(gameTime);
-            snake.Update(new Vector2(player.IndexX, player.IndexY), gameTime);
-            coolEnemy.Update(gameTime);
+            foreach (Enemy enemy in enemies)
+            {
+                if (enemy is Snake snake)
+                {
+                    snake.Update(gameTime, new Vector2(player.IndexX, player.IndexY));
+                }
+                else if (enemy is CoolEnemy cool)
+                {
+                    cool.Update(gameTime, new Vector2(player.IndexX, player.IndexY));
+                }
+                else
+                {
+                    enemy.Update(gameTime);
+                }
+            }
 
             if (AllCubesColored()) StartNewRound();
 
@@ -203,29 +220,26 @@ namespace QBert
             {
                 player.Draw(_spriteBatch);
                 DrawCubes();
-                foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                foreach (Enemy enemy in enemies) if (enemy is GreenCircle) enemy.Draw(_spriteBatch);
             }
             else if (!player.IsPlayerLive && !player.IsDyingDown)
             {
                 DrawCubes();
-                foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                foreach (Enemy enemy in enemies) if (enemy is GreenCircle) enemy.Draw(_spriteBatch);
                 player.Draw(_spriteBatch);
             }
             else
             {
                 DrawCubes();
-                foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                foreach (Enemy enemy in enemies) if (enemy is GreenCircle) enemy.Draw(_spriteBatch);
                 player.Draw(_spriteBatch);
             }
 
-            foreach (RedCircle circle in redCircles) circle.Draw(_spriteBatch);
-            purpleCircle.Draw(_spriteBatch);
-            snake.Draw(_spriteBatch);
-            coolEnemy.Draw(_spriteBatch);
+            foreach (Enemy enemy in enemies) if (!(enemy is GreenCircle)) enemy.Draw(_spriteBatch);
 
             HUD.Draw(_spriteBatch);
 
-           // _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(0, 0, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
+            // _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(0, 0, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
             //_spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(_graphics.PreferredBackBufferWidth - arcadeBackgroundSide.Width, _graphics.PreferredBackBufferHeight - arcadeBackgroundSide.Height, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
 
             _spriteBatch.Draw(arcadeBackgroundFooter, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - arcadeBackgroundFooter.Width / 2,
@@ -258,8 +272,7 @@ namespace QBert
             HUD.Round = round + 1;
             cubes.Clear();
             Cells.Clear();
-            redCircles.Clear();
-            greenCircles.Clear();
+            enemies.Clear();
 
             Initialize();
             player.IndexX = 1;

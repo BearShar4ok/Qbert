@@ -17,10 +17,7 @@ namespace QBert.Classes.Enemies
             sprite_width = 44;
             sprite_height = 30;
             spriteIndex = 0;
-        }
-        public override void LoadContent(ContentManager manager)
-        {
-            texture = manager.Load<Texture2D>("redCircle");
+            textureName = "redCircle";
         }
         public override void Draw(SpriteBatch brush)
         {

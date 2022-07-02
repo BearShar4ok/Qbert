@@ -20,6 +20,8 @@ namespace QBert.Classes.Enemies
         protected int sprite_height;
         protected int spriteIndex;
         protected int jumpTimer = 20;
+        protected string textureName;
+        public bool IsAlive { get;  set; } = true;
 
         protected JumpManager circleJump = new JumpManager();
 
@@ -30,12 +32,15 @@ namespace QBert.Classes.Enemies
         {
             indexX = random.Next(1, 3);
         }
-        public abstract void LoadContent(ContentManager manager);
+        public virtual void LoadContent(ContentManager manager)
+        {
+            texture = manager.Load<Texture2D>(textureName);
+        }
         public virtual void Draw(SpriteBatch brush)
         {
             brush.Draw(texture, position, sourceRectangle, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
-        public virtual void Update(GameTime gametime)
+        public virtual void Update(GameTime gametime, Vector2 playerIndexes = default)
         {
             if (circleJump != null && circleJump.NowJumpState == JumpStates.inJump)
             {
@@ -50,8 +55,9 @@ namespace QBert.Classes.Enemies
                 if (jumpTimer == 0)
                 {
                     indexY--;
-                    if (indexY < 0)
+                    if (indexY < 0 && circleJump.NowJumpState == JumpStates.readyToJump)
                     {
+                        IsAlive = false;
                         return;
                     }
                     else
