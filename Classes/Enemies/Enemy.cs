@@ -49,12 +49,35 @@ namespace QBert.Classes.Enemies
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
-                    if (indexY == 1) return;
                     indexY--;
-                    indexX += random.Next(0, 2);
-                    circleJump.UpdateTargetPosition(CountPositionByIndex(), position);
-                    spriteIndex = 1;
-                    jumpTimer = 20;
+                    if (indexY < 0)
+                    {
+                        return;
+                    }
+                    else
+                    {
+
+                        indexX += random.Next(0, 2);
+                        if (indexY == 0 && this is PurpleCircle)
+                        {
+                            return;
+                        }
+                        else if (indexY == 0 && !(this is PurpleCircle))
+                        {
+                            circleJump.TimeToEnd = 0.8f;
+                            circleJump.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position);
+                            spriteIndex = 1;
+                            jumpTimer = 20;
+                        }
+                        else
+                        {
+
+                            circleJump.UpdateTargetPosition(CountPositionByIndex(), position);
+                            spriteIndex = 1;
+                            jumpTimer = 20;
+                        }
+                    }
+
                 }
             }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);

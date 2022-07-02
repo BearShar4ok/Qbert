@@ -32,12 +32,12 @@ namespace QBert.Classes.UI
             round = 1;
             labels = new List<Label>()
             {
-            new Label("PLAYER", new Vector2(60 + leftBorderX, 50 + topBorderY), Color.Purple, "font32"),
-            new Label("0", new Vector2(60 + leftBorderX, 100 + topBorderY), Color.DarkOrange, "font28"),
-            new Label("LEVEL:", new Vector2(700 + leftBorderX, 50 + topBorderY), Color.Green, "font28"),
-            new Label("1", new Vector2(850 + leftBorderX, 50 + topBorderY), Color.DarkOrange, "font28"),
-            new Label("ROUND:", new Vector2(700 + leftBorderX, 100 + topBorderY), Color.DeepPink, "font28"),
-            new Label("1", new Vector2(850 + leftBorderX, 100 + topBorderY), Color.DarkOrange, "font28")
+            new Label("PLAYER", new Vector2(120 + leftBorderX, topBorderY), Color.Purple, "font32"),
+            new Label("0", new Vector2(120 + leftBorderX, 50 + topBorderY), Color.DarkOrange, "font28"),
+            new Label("LEVEL:", new Vector2(680 + leftBorderX,  topBorderY), Color.Green, "font28"),
+            new Label("1", new Vector2(830 + leftBorderX,  topBorderY), Color.DarkOrange, "font28"),
+            new Label("ROUND:", new Vector2(680 + leftBorderX, 50 + topBorderY), Color.DeepPink, "font28"),
+            new Label("1", new Vector2(830 + leftBorderX, 50 + topBorderY), Color.DarkOrange, "font28")
             };
         }
 

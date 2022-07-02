@@ -39,6 +39,9 @@ namespace QBert.Classes
                 case JumpStates.inJump:
                     Jump(gametime);
                     break;
+                case JumpStates.freeFall:
+                    FreeFall(gametime);
+                    break;
                 default:
                     break;
             }
@@ -50,6 +53,26 @@ namespace QBert.Classes
             this.startPos = startPos;
             position = startPos;
             NowJumpState = JumpStates.inJump;
+        }
+        private void FreeFall(GameTime gametime)
+        {
+            nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
+            if (nowTime <= timeToEnd)
+            {
+                position.Y = startPos.Y + g * nowTime * nowTime / 2;
+            }
+            else
+            {
+                timeToEnd = 0.4f;
+                g = 2000f;
+                nowTime = 0;
+                NowJumpState = JumpStates.readyToJump;
+            }
+            if (debugPlayer == "Player")
+            {
+                IsFall = prevPosition.Y < position.Y;
+            }
+            prevPosition = position;
         }
         private void Jump(GameTime gametime)
         {
