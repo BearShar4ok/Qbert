@@ -24,6 +24,7 @@ namespace QBert.Classes
         private float nowTimer = 0;
         private float maxMoveTime;
 
+        public bool HasGone { get; set; } = false;
         public bool IsGoing { get; set; }
         public float MaxMoveTime { get { return maxMoveTime; } }
 
@@ -33,10 +34,9 @@ namespace QBert.Classes
             this.indexY = indexY;
             maxMoveTime = (9 - indexY) * 0.9f;
             sourceRectangle = new Rectangle(spriteIndex <= 2 ? sprite_width * spriteIndex : sprite_width * spriteIndex + 1, 0, spriteIndex == 2 ? sprite_width + 1 : sprite_width, sprite_height);
-            position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 25, Game1.Cells[indexY][indexX].Rect_top.Y + 10);
+            position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y + 20);
             startPosition = position;
-            targetPosition = new Vector2(954, 293);
-            // 934 273
+            targetPosition = new Vector2(Game1.Cells[9][0].Rect_top.X + 20, Game1.Cells[9][0].Rect_top.Y + 20);
         }
 
         public void LoadContent(ContentManager manager)
@@ -62,8 +62,9 @@ namespace QBert.Classes
                 MoveSlowly(gameTime);
                 if (position.Y <= targetPosition.Y)
                 {
-                    Game1.PlayerDroppedFromPlatform();
                     IsGoing = false;
+                    HasGone = true;
+                    Game1.PlayerDroppedFromPlatform();
                 }
             }
         }

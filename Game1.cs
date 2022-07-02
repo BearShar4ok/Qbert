@@ -58,11 +58,10 @@ namespace QBert
         private CoolEnemy coolEnemy;
         private List<GreenCircle> greenCircles = new List<GreenCircle>();
         private Snake snake;
-        private Platform platform;
         private static Player player;
-        private Vector2 playerStartPosition = new Vector2(/*cubes[6][0].Rect_top.X + 25*/ 952, /*cubes[6][0].Rect_top.Y - 20*/ 399);
         private Texture2D arcadeBackground;
         private Texture2D arcadeBackgroundFooter;
+        private static List<Platform> platforms;
 
         public Game1()
         {
@@ -74,7 +73,6 @@ namespace QBert
             //_graphics.IsFullScreen = true;
 
             // 1000 w  900 h
-            player = new Player(playerStartPosition, 1, 7, _graphics.PreferredBackBufferHeight); // 952 399
             HUD.LeftBorderX = _graphics.PreferredBackBufferWidth / 2 - 500;
             HUD.TopBorderY = _graphics.PreferredBackBufferHeight / 2 - 450;
             HUD.Init();
@@ -84,7 +82,7 @@ namespace QBert
         {
             // TODO: Add your initialization logic here
             cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width - 18;
-            cube_coord_y = _graphics.PreferredBackBufferHeight - 400;
+            cube_coord_y = _graphics.PreferredBackBufferHeight - 350;
 
             int amountCellsInLine = 9;
             for (int i = 0; amountCellsInLine >= i; i++)
@@ -117,7 +115,8 @@ namespace QBert
                 }
             }
 
-            platform = new Platform(0, 4);
+            player = new Player(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
+            platforms = new List<Platform>() { new Platform(0, 4) };
 
             redCircles.Add(new RedCircle());
             greenCircles.Add(new GreenCircle());
@@ -149,7 +148,8 @@ namespace QBert
             purpleCircle.LoadContent(Content);
             snake.LoadContent(Content);
             coolEnemy.LoadContent(Content);
-            platform.LoadContent(Content);
+
+            foreach (Platform platform in platforms) platform.LoadContent(Content);
 
             player.LoadContent(Content);
             arcadeBackground = Content.Load<Texture2D>("ArcadeBackground");
@@ -167,7 +167,11 @@ namespace QBert
 
 
             player.Update(gameTime);
-            platform.Update(gameTime);
+
+            for (int i = 0; i < platforms.Count; i++)
+            {
+                platforms[i].Update(gameTime);
+            }
 
             foreach (RedCircle circle in redCircles) circle.Update(gameTime);
             foreach (GreenCircle circle in greenCircles) circle.Update(gameTime);
@@ -189,7 +193,10 @@ namespace QBert
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
-            platform.Draw(_spriteBatch);
+            for (int i = 0; i < platforms.Count; i++)
+            {
+                platforms[i].Draw(_spriteBatch);
+            }
 
             if (!player.IsPlayerLive && player.playerJump.IsFall && !player.IsDyingDown)
             {
@@ -250,7 +257,6 @@ namespace QBert
             greenCircles.Clear();
 
             Initialize();
-            player.Position = playerStartPosition;
             player.IndexX = 1;
             player.IndexY = 7;
         }
@@ -275,7 +281,15 @@ namespace QBert
 
         private static void MakePlatformEndJourney()
         {
-            
+            for (int i = 0; i < platforms.Count; i++)
+            {
+                if (platforms[i].HasGone)
+                {
+                    platforms.Remove(platforms[i]);
+                    break;
+                }
+            }
+            player.StartFalling();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace QBert.Classes.Enemies
                 if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
                 {
                     Follow(playerIndexes);
-                    snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position);
+                    snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position, JumpStates.inJump);
                     jumpTimer = 20;
                 }
             }

@@ -46,7 +46,7 @@ namespace QBert.Classes.Enemies
                     int direction = random.Next(0, 2);
                     spriteIndex = direction == 0 ? 3 : 5;
                     indexX += direction;
-                    circleJump.UpdateTargetPosition(CountPositionByIndex(), position);
+                    circleJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                     jumpTimer = 20;
                 }
             }

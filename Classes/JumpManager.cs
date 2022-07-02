@@ -46,13 +46,13 @@ namespace QBert.Classes
                     break;
             }
         }
-        public void UpdateTargetPosition(Vector2 targetPos, Vector2 startPos, string debug="q")
+        public void UpdateTargetPosition(Vector2 targetPos, Vector2 startPos, JumpStates NowJumpState, string debug = "q")
         {
             this.targetPos = targetPos;
             debugPlayer = debug;
             this.startPos = startPos;
             position = startPos;
-            NowJumpState = JumpStates.inJump;
+            this.NowJumpState = NowJumpState;
         }
         private void FreeFall(GameTime gametime)
         {
