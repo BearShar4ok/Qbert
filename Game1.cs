@@ -26,13 +26,13 @@ namespace QBert
                 new List<Color>() { new Color(255, 119, 33) }
             },
             new List<List<Color>>()
-            { 
+            {
                 new List<Color>() { new Color(169, 185, 15), new Color(0, 102, 239), /*new Color(153, 0, 102)*/ },
                 new List<Color>() { new Color(119, 135, 135) },
                 new List<Color>() { new Color(15, 15, 153) }
             },
             new List<List<Color>>()
-            { 
+            {
                 new List<Color>() { new Color(135, 0, 119), new Color(0, 49, 153), /*new Color(33, 135, 206)*/ },
                 new List<Color>() { new Color(185, 185, 33) },
                 new List<Color>() { new Color(185, 49, 49) }
@@ -61,6 +61,8 @@ namespace QBert
         private Platform platform;
         private static Player player;
         private Vector2 playerStartPosition = new Vector2(/*cubes[6][0].Rect_top.X + 25*/ 952, /*cubes[6][0].Rect_top.Y - 20*/ 399);
+        private Texture2D arcadeBackground;
+        private Texture2D arcadeBackgroundFooter;
 
         public Game1()
         {
@@ -81,8 +83,8 @@ namespace QBert
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width - 8;
-            cube_coord_y = _graphics.PreferredBackBufferHeight - 150;
+            cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width - 18;
+            cube_coord_y = _graphics.PreferredBackBufferHeight - 400;
 
             int amountCellsInLine = 9;
             for (int i = 0; amountCellsInLine >= i; i++)
@@ -150,6 +152,8 @@ namespace QBert
             platform.LoadContent(Content);
 
             player.LoadContent(Content);
+            arcadeBackground = Content.Load<Texture2D>("ArcadeBackground");
+            arcadeBackgroundFooter = Content.Load<Texture2D>("ArcadeBackgroundFooter");
 
             HUD.LoadContent(Content);
         }
@@ -186,21 +190,18 @@ namespace QBert
             _spriteBatch.Begin();
 
             platform.Draw(_spriteBatch);
-            if (!player.IsPlayerLive)
+
+            if (!player.IsPlayerLive && player.playerJump.IsFall && !player.IsDyingDown)
             {
-                if (player.playerJump.IsFall)
-                {
-                    player.Draw(_spriteBatch);
-                    DrawCubes();
-                    foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
-                }
-                else
-                {
-                    DrawCubes();
-                    foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
-                    player.Draw(_spriteBatch);
-                }
-                
+                player.Draw(_spriteBatch);
+                DrawCubes();
+                foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+            }
+            else if (!player.IsPlayerLive && !player.IsDyingDown)
+            {
+                DrawCubes();
+                foreach (GreenCircle circle in greenCircles) circle.Draw(_spriteBatch);
+                player.Draw(_spriteBatch);
             }
             else
             {
@@ -215,6 +216,10 @@ namespace QBert
             coolEnemy.Draw(_spriteBatch);
 
             HUD.Draw(_spriteBatch);
+            _spriteBatch.Draw(arcadeBackgroundFooter, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - arcadeBackgroundFooter.Width / 2,
+                _graphics.PreferredBackBufferHeight - arcadeBackgroundFooter.Height, arcadeBackgroundFooter.Width, arcadeBackgroundFooter.Height), Color.White);
+
+            _spriteBatch.Draw(arcadeBackground, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - arcadeBackground.Width / 2, 0, arcadeBackground.Width, arcadeBackground.Height), Color.White);
 
             _spriteBatch.End();
 

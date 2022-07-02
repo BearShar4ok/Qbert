@@ -38,6 +38,7 @@ namespace QBert.Classes
         public float MaxMoveTime { get { return maxMoveTime; } set { maxMoveTime = value; } }
         public bool IsPlayerLive { get; private set; } = true;
         public PlayerStates PlayerState { get; set; } = PlayerStates.notOnPlatform;
+        public bool IsDyingDown { get; private set; } = false;
         public JumpManager playerJump { get; private set; }
 
         public Player(Vector2 position, int indexX, int indexY, int screenHeight)
@@ -98,6 +99,7 @@ namespace QBert.Classes
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
                     hasChangedCubeColor = false;
+                    IsDyingDown = false;
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
@@ -109,6 +111,7 @@ namespace QBert.Classes
                 else if (Keyboard.GetState().IsKeyDown(Keys.Z))
                 {
                     hasChangedCubeColor = false;
+                    IsDyingDown = true;
                     spriteIndex = 7;
                     indexY--;
                     playerJump.NowJumpState = JumpStates.inJump;
@@ -119,6 +122,7 @@ namespace QBert.Classes
                 else if (Keyboard.GetState().IsKeyDown(Keys.C))
                 {
                     hasChangedCubeColor = false;
+                    IsDyingDown = true;
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
@@ -130,6 +134,7 @@ namespace QBert.Classes
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
                     hasChangedCubeColor = false;
+                    IsDyingDown = false;
                     spriteIndex = 1;
                     indexY++;
                     playerJump.NowJumpState = JumpStates.inJump;
@@ -157,7 +162,10 @@ namespace QBert.Classes
             }
             else
             {
-                playerJump.TimeToEnd = 1.2f;
+                if (!IsDyingDown)
+                    playerJump.TimeToEnd = 1.2f;
+                else
+                    playerJump.TimeToEnd = 0.8f;
                 targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + x, screenHeight + texture.Height);
                 IsPlayerLive = false;
             }
