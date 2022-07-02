@@ -58,6 +58,7 @@ namespace QBert
         private Vector2 playerStartPosition = new Vector2(/*cubes[6][0].Rect_top.X + 25*/ 942, /*cubes[6][0].Rect_top.Y - 20*/ 149);
         private Texture2D arcadeBackground;
         private Texture2D arcadeBackgroundFooter;
+        private Texture2D arcadeBackgroundSide;
 
         public Game1()
         {
@@ -147,7 +148,7 @@ namespace QBert
             player.LoadContent(Content);
             arcadeBackground = Content.Load<Texture2D>("ArcadeBackground");
             arcadeBackgroundFooter = Content.Load<Texture2D>("ArcadeBackgroundFooter");
-
+            arcadeBackgroundSide = Content.Load<Texture2D>("ArcadeBackgroundSide");
             HUD.LoadContent(Content);
         }
 
@@ -206,6 +207,10 @@ namespace QBert
             coolEnemy.Draw(_spriteBatch);
 
             HUD.Draw(_spriteBatch);
+
+            _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(0, 0, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
+            _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(_graphics.PreferredBackBufferWidth - arcadeBackgroundSide.Width, _graphics.PreferredBackBufferHeight - arcadeBackgroundSide.Height, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
+
             _spriteBatch.Draw(arcadeBackgroundFooter, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - arcadeBackgroundFooter.Width / 2,
                 _graphics.PreferredBackBufferHeight - arcadeBackgroundFooter.Height, arcadeBackgroundFooter.Width, arcadeBackgroundFooter.Height), Color.White);
 
