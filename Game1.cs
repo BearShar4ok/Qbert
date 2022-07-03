@@ -17,6 +17,24 @@ namespace QBert
         public static Action PlayerSteppedOnPlatform = MakePlatformMove;
         public static Action PlayerDroppedFromPlatform = MakePlatformEndJourney;
         public static Action PlayerLostLife = () => { playerFreezesAll = 2000f;  };
+        public static Action StunAll = () => { stunAllEnemies = 10000f; };
+        public static Action<SpawnableEnemies> KillThing = enemy => 
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (enemy == SpawnableEnemies.coolEnemy && enemies[i] is CoolEnemy)
+                {
+                    enemies.RemoveAt(i);
+                    break;
+                }
+
+                if (enemy == SpawnableEnemies.greenBall && enemies[i] is GreenCircle)
+                {
+                    enemies.RemoveAt(i);
+                    break;
+                }
+            }
+        };
 
         private static List<List<List<Color>>> colors = new List<List<List<Color>>>()
         {
@@ -58,6 +76,7 @@ namespace QBert
         private float spawnTimer = 2000f;
         private static float platformFreezesAll = 0;
         private static float playerFreezesAll = 0;
+        private static float stunAllEnemies = 0;
         //private List<RedCircle> redCircles = new List<RedCircle>();
         //private PurpleCircle purpleCircle;
         //private CoolEnemy coolEnemy;
@@ -231,6 +250,19 @@ namespace QBert
                 else return;
             }
 
+            player.Update(gameTime);
+
+            if (stunAllEnemies > 0)
+            {
+                stunAllEnemies -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (stunAllEnemies <= 0)
+                {
+                    stunAllEnemies = 0;
+                    return;
+                }
+                else return;
+            }
+
             if (spawnTimer <= 0)
             {
                 SpawnEnemy();
@@ -238,8 +270,6 @@ namespace QBert
             }
 
             UpgradePurpleCircleToSnake();
-
-            player.Update(gameTime);
 
             foreach (Enemy enemy in enemies)
             {
