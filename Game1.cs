@@ -16,7 +16,7 @@ namespace QBert
 
         public static Action PlayerSteppedOnPlatform = MakePlatformMove;
         public static Action PlayerDroppedFromPlatform = MakePlatformEndJourney;
-        public static Action PlayerLostLife = ContinueRoundWithLessHealth;
+        public static Action PlayerLostLife = () => { playerFreezesAll = 2000f;  };
 
         private static List<List<List<Color>>> colors = new List<List<List<Color>>>()
         {
@@ -209,6 +209,13 @@ namespace QBert
                 {
                     playerFreezesAll = 0;
                     foreach (Enemy enemy in enemies) enemy.IsAlive = false;
+                    foreach (List<Cell> c in Cells)
+                    {
+                        foreach (Cell cell in c)
+                        {
+                            if (cell.CellState == CellStates.enemy || cell.CellState == CellStates.platform) cell.objectStatechanged("1");
+                        }
+                    }
                 }
                 else return;
             }
@@ -353,7 +360,7 @@ namespace QBert
 
         private static void ContinueRoundWithLessHealth()
         {
-            playerFreezesAll = 2000f;
+            
         }
     }
 }
