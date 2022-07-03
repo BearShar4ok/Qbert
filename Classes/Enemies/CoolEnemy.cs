@@ -26,15 +26,15 @@ namespace QBert.Classes.Enemies
 
         public override void Update(GameTime gametime,Vector2 playerIndexes)
         {
-            if (circleJump != null && circleJump.NowJumpState == JumpStates.inJump)
+            if (enemyJump != null && enemyJump.NowJumpState == JumpStates.inJump)
             {
-                circleJump.Update(gametime);
-                position = circleJump.position;
+                enemyJump.Update(gametime);
+                position = enemyJump.position;
 
-                if (circleJump.NowTime >= 0.13f && spriteIndex % 4 == 0) spriteIndex++;
+                if (enemyJump.NowTime >= 0.13f && spriteIndex % 4 == 0) spriteIndex++;
             }
 
-            if (circleJump.NowJumpState == JumpStates.readyToJump)
+            if (enemyJump.NowJumpState == JumpStates.readyToJump)
             {
                 if (!hasColoredCube)
                 {
@@ -50,7 +50,7 @@ namespace QBert.Classes.Enemies
                     int direction = random.Next(0, 2);
                     spriteIndex = direction == 0 ? 3 : 5;
                     indexX += direction;
-                    circleJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
+                    enemyJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                     jumpTimer = 20;
                     hasColoredCube = false;
                 }

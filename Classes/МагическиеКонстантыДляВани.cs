@@ -6,5 +6,6 @@ namespace QBert.Classes
 {
     class МагическиеКонстантыДляВани
     {
+
     }
 }

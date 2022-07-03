@@ -8,7 +8,7 @@ using System.Text;
 
 namespace QBert.Classes
 {
-    class Platform
+    class Platform : IDrawableOur
     {
         private Vector2 position;
         private Vector2 startPosition;

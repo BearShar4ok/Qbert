@@ -57,7 +57,7 @@ namespace QBert
         //private PurpleCircle purpleCircle;
         //private CoolEnemy coolEnemy;
         //private List<GreenCircle> greenCircles = new List<GreenCircle>();
-       // private Snake snake;
+        // private Snake snake;
         private static Player player;
         private Texture2D arcadeBackground;
         private Texture2D arcadeBackgroundFooter;
@@ -167,7 +167,7 @@ namespace QBert
             // TODO: Add your update logic here
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (!enemies[i].IsAlive)
+                if (!enemies[i].IsAlive && enemies[i].enemyJump.NowJumpState == JumpStates.readyToJump)
                 {
                     enemies.RemoveAt(i);
                     i--;
@@ -211,31 +211,60 @@ namespace QBert
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
+            List<IDrawableOur> drawList = new List<IDrawableOur>();
+            foreach (var cube in cubes)
+            {
+                drawList.AddRange(cube);
+            }
+            foreach (Enemy enemy in enemies)
+                if (enemy is GreenCircle)
+                    drawList.Add(enemy);
+
+            Snake snake = null;
+            foreach (Enemy enemy in enemies)
+                if (enemy is Snake)
+                    snake = (Snake)enemy;
+
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].Draw(_spriteBatch);
             }
-
             if (!player.IsPlayerLive && player.playerJump.IsFall && !player.IsDyingDown)
             {
-                player.Draw(_spriteBatch);
-                DrawCubes();
-                foreach (Enemy enemy in enemies) if (enemy is GreenCircle) enemy.Draw(_spriteBatch);
-            }
-            else if (!player.IsPlayerLive && !player.IsDyingDown)
-            {
-                DrawCubes();
-                foreach (Enemy enemy in enemies) if (enemy is GreenCircle) enemy.Draw(_spriteBatch);
-                player.Draw(_spriteBatch);
+                drawList.Insert(0, player);
             }
             else
             {
-                DrawCubes();
-                foreach (Enemy enemy in enemies) if (enemy is GreenCircle) enemy.Draw(_spriteBatch);
-                player.Draw(_spriteBatch);
+                drawList.Add(player);
             }
 
-            foreach (Enemy enemy in enemies) if (!(enemy is GreenCircle)) enemy.Draw(_spriteBatch);
+            if (snake != null)
+            {
+                if (!snake.IsAlive)
+                {
+                    if (snake.enemyJump.IsFall)
+                    {
+                        int a = 10;
+                    }
+                }
+                if (snake.IsAlive || (!snake.IsAlive && !snake.enemyJump.IsFall && !snake.IsDyingDown) || (!snake.IsAlive && snake.IsDyingDown))
+                {
+                    drawList.Add(snake);
+                }
+                else
+                {
+                    drawList.Insert(0, snake);
+                }
+            }
+            foreach (var item in drawList)
+            {
+                item.Draw(_spriteBatch);
+            }
+
+
+            foreach (Enemy enemy in enemies)
+                if (!(enemy is GreenCircle) && !(enemy is Snake))
+                    enemy.Draw(_spriteBatch);
 
             HUD.Draw(_spriteBatch);
 
@@ -280,15 +309,9 @@ namespace QBert
         }
         private void DrawCubes()
         {
-            foreach (List<Cell> l in Cells)
-            {
-                foreach (Cell cell in l) cell.Draw(_spriteBatch);
-            }
 
-            foreach (List<Cube> l in cubes)
-            {
-                foreach (Cube cube in l) cube.Draw(_spriteBatch);
-            }
+
+
         }
 
         private static void MakePlatformMove()

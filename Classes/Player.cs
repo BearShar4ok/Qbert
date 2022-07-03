@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace QBert.Classes
 {
-    class Player
+    class Player : IDrawableOur
     {
         private int score = 0;
 

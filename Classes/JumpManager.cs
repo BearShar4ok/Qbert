@@ -19,7 +19,7 @@ namespace QBert.Classes
         private float timeToEnd = 0.4f;
         private float nowTime;
 
-        private  float g = 2000f;
+        private float g = 2000f;
 
         public JumpStates NowJumpState { get; set; } = JumpStates.readyToJump;
         public Vector2 position;
@@ -67,10 +67,9 @@ namespace QBert.Classes
                 nowTime = 0;
                 NowJumpState = JumpStates.readyToJump;
             }
-            if (debugPlayer == "Player")
-            {
-                IsFall = prevPosition.Y < position.Y;
-            }
+            //if (debugPlayer == "Player")
+            IsFall = prevPosition.Y < position.Y;
+
             prevPosition = position;
         }
         private void Jump(GameTime gametime)
@@ -89,10 +88,8 @@ namespace QBert.Classes
                 nowTime = 0;
                 NowJumpState = JumpStates.readyToJump;
             }
-            if (debugPlayer == "Player")
-            {
-                IsFall = prevPosition.Y < position.Y;
-            }
+            //if (debugPlayer == "Player")
+            IsFall = prevPosition.Y < position.Y;
             prevPosition = position;
         }
     }

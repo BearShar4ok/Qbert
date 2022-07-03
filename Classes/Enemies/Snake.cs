@@ -10,12 +10,13 @@ namespace QBert.Classes.Enemies
 {
     class Snake : Enemy
     {
-        private JumpManager snakeJump;
+        private bool isRight;
+        public bool IsDyingDown { get; private set; } = false;
 
         public Snake()
         {
             position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70);
-            snakeJump = new JumpManager();
+            enemyJump = new JumpManager();
             textureName = "purpleSnake";
             indexX = 1;
             indexY = 2;
@@ -27,15 +28,15 @@ namespace QBert.Classes.Enemies
         {
             brush.Draw(texture, position, sourceRectangle, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
-        public override void Update( GameTime gametime, Vector2 playerIndexes)
+        public override void Update(GameTime gametime, Vector2 playerIndexes)
         {
-            if (snakeJump != null && snakeJump.NowJumpState == JumpStates.inJump)
+            if (enemyJump != null && enemyJump.NowJumpState == JumpStates.inJump)
             {
-                snakeJump.Update(gametime);
-                position = snakeJump.position;
+                enemyJump.Update(gametime);
+                position = enemyJump.position;
             }
 
-            if (snakeJump.NowJumpState == JumpStates.readyToJump)
+            if (enemyJump.NowJumpState == JumpStates.readyToJump)
             {
 
                 jumpTimer--;
@@ -43,14 +44,18 @@ namespace QBert.Classes.Enemies
                 if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
                 {
                     Follow(playerIndexes);
-                    if (Game1.Cells[indexY][indexX].CellState == CellStates.air)
+                    if (Game1.Cells[indexY][indexX].CellState == CellStates.air || Game1.Cells[indexY][indexX].CellState == CellStates.platform)
                     {
-                        snakeJump.TimeToEnd = 1.2f;
-                        snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, 1300), position, JumpStates.inJump);
                         IsAlive = false;
+                        enemyJump.TimeToEnd = 1.2f;
+                        int x = 100;
+                        if (!isRight)
+                            x = -100;
+                        enemyJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20 + x, 1300), position, JumpStates.inJump);
+                        IsDyingDown = IsDyingDown;
                     }
                     else
-                        snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position, JumpStates.inJump);
+                        enemyJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position, JumpStates.inJump);
                     jumpTimer = 20;
                 }
             }
@@ -59,33 +64,36 @@ namespace QBert.Classes.Enemies
         }
         public void Follow(Vector2 playerIndexes)
         {
-            /*if ((Math.Abs(indexY - playerIndexes.Y) == 1 && indexX == playerIndexes.X) || 
-                (indexY - playerIndexes.Y == -1 && indexX - playerIndexes.X == 1) ||
-                (indexY - playerIndexes.Y == 1 && indexX - playerIndexes.X == -1))
-            {
-                
-                return;
-            }*/
-
             if (indexX == (int)playerIndexes.X && indexY == (int)playerIndexes.Y) return;
 
 
             int n = (int)playerIndexes.X - indexX;
             int k = (int)playerIndexes.Y - indexY + n;
 
-            if (Math.Abs(k) >= Math.Abs(n)) indexY += k > 0 ? 1 : -1;
+            int changeX;
+            int changeY;
+
+            if (Math.Abs(k) >= Math.Abs(n))
+            {
+                changeY = k > 0 ? 1 : -1;
+                indexY += changeY;
+            }
             else
             {
-                indexX += n > 0 ? 1 : -1;
-                indexY += n > 0 ? -1 : 1;
-            }
+                changeX = n > 0 ? 1 : -1;
+                changeY = n > 0 ? -1 : 1;
 
+                isRight = changeX >= 0;
+                indexX += changeX;
+                indexY += changeY;
+            }
+            IsDyingDown = changeY < 0;
             if (Math.Abs(k) >= Math.Abs(n) && k > 0) spriteIndex = 1;
             if (Math.Abs(k) >= Math.Abs(n) && k <= 0) spriteIndex = 3;
             if (Math.Abs(k) < Math.Abs(n) && n > 0) spriteIndex = 5;
             if (Math.Abs(k) < Math.Abs(n) && n <= 0) spriteIndex = 7;
         }
 
-        
+
     }
 }

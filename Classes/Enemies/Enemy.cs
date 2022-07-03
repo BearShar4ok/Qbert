@@ -8,7 +8,7 @@ using System.Text;
 
 namespace QBert.Classes.Enemies
 {
-    public abstract class Enemy
+    public abstract class Enemy : IDrawableOur
     {
         protected Random random = new Random();
         protected Vector2 position;
@@ -21,9 +21,9 @@ namespace QBert.Classes.Enemies
         protected int spriteIndex;
         protected int jumpTimer = 20;
         protected string textureName;
-        public bool IsAlive { get;  set; } = true;
+        public bool IsAlive { get; set; } = true;
 
-        protected JumpManager circleJump = new JumpManager();
+        public JumpManager enemyJump { get; set; } = new JumpManager();
 
         public virtual int IndexX { get { return indexX; } }
         public virtual int IndexY { get { return indexY; } }
@@ -42,20 +42,20 @@ namespace QBert.Classes.Enemies
         }
         public virtual void Update(GameTime gametime, Vector2 playerIndexes = default)
         {
-            if (circleJump != null && circleJump.NowJumpState == JumpStates.inJump)
+            if (enemyJump != null && enemyJump.NowJumpState == JumpStates.inJump)
             {
-                circleJump.Update(gametime);
-                position = circleJump.position;
+                enemyJump.Update(gametime);
+                position = enemyJump.position;
             }
 
-            if (circleJump.NowJumpState == JumpStates.readyToJump)
+            if (enemyJump.NowJumpState == JumpStates.readyToJump)
             {
                 spriteIndex = 0;
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
                     indexY--;
-                    if (indexY < 0 && circleJump.NowJumpState == JumpStates.readyToJump)
+                    if (indexY < 0 && enemyJump.NowJumpState == JumpStates.readyToJump)
                     {
                         IsAlive = false;
                         return;
@@ -70,15 +70,15 @@ namespace QBert.Classes.Enemies
                         }
                         else if (indexY == 0 && !(this is PurpleCircle))
                         {
-                            circleJump.TimeToEnd = 0.8f;
-                            circleJump.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
+                            enemyJump.TimeToEnd = 0.8f;
+                            enemyJump.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
                         }
                         else
                         {
 
-                            circleJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
+                            enemyJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
                         }

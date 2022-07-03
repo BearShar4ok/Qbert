@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace QBert.Classes
 {
-    public class Cube
+    public class Cube : IDrawableOur
     {
         private Texture2D texture_cube;
         private Texture2D texture_top;
