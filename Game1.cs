@@ -213,7 +213,7 @@ namespace QBert
                     {
                         foreach (Cell cell in c)
                         {
-                            if (cell.CellState == CellStates.enemy || cell.CellState == CellStates.platform) cell.objectStatechanged("1");
+                            if (cell.CellState == CellStates.enemy) cell.objectStatechanged("1");
                         }
                     }
                 }

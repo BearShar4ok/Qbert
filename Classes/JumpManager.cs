@@ -57,14 +57,13 @@ namespace QBert.Classes
         private void FreeFall(GameTime gametime)
         {
             nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
-            if (position.Y<= targetPos.Y)//nowTime <= timeToEnd
+            if (position.Y < targetPos.Y)//nowTime <= timeToEnd
             {
                 float deltaY = (g * nowTime * nowTime / 2) - (g * prevTime * prevTime / 2);
                 if (deltaY > targetPos.Y - position.Y)
                     position.Y = targetPos.Y;
                 else
                     position.Y += deltaY;
-
             }
             else
             {

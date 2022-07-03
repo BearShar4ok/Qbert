@@ -10,7 +10,6 @@ namespace QBert.Classes.Enemies
 {
     class CoolEnemy : Enemy
     {
-        private bool hasColoredCube = false;
         public CoolEnemy() : base()
         {
             position = CountPositionByIndex();
@@ -36,10 +35,10 @@ namespace QBert.Classes.Enemies
 
             if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
-                if (!hasColoredCube)
+                if (!hasJumped)
                 {
                     Game1.cubes[indexY - 1][indexX - 1].ChangeTopColor(true);
-                    hasColoredCube = true;
+                    hasJumped = true;
                 }
 
                 jumpTimer--;
@@ -53,7 +52,7 @@ namespace QBert.Classes.Enemies
                     indexX += direction;
                     enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                     jumpTimer = 20;
-                    hasColoredCube = false;
+                    hasJumped = false;
                     Game1.Cells[indexY][indexX].objectStatechanged(this);
                 }
             }
