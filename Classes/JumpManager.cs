@@ -64,7 +64,6 @@ namespace QBert.Classes
                     position.Y = targetPos.Y;
                 else
                     position.Y += deltaY;
-
             }
             else
             {

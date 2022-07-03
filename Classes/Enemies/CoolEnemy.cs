@@ -10,7 +10,6 @@ namespace QBert.Classes.Enemies
 {
     class CoolEnemy : Enemy
     {
-        private bool hasColoredCube = false;
         public CoolEnemy() : base()
         {
             position = CountPositionByIndex();
@@ -49,7 +48,7 @@ namespace QBert.Classes.Enemies
                 if (!hasColoredCube && indexY > 0)
                 {
                     Game1.cubes[indexY - 1][indexX - 1].ChangeTopColor(true);
-                    hasColoredCube = true;
+                    hasJumped = true;
                 }
 
                 jumpTimer--;

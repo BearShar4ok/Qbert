@@ -62,6 +62,11 @@ namespace QBert.Classes
 
         public void Update(GameTime gametime)
         {
+            if (position.Y >= 1100 && !IsPlayerLive)
+            {
+                Game1.PlayerLostLife();
+            }
+
             if (playerJump != null && playerJump.NowJumpState == JumpStates.inJump)
             {
                 playerJump.Update(gametime);
@@ -89,7 +94,7 @@ namespace QBert.Classes
                 if (Game1.Cells[indexY][indexX].CellState == CellStates.enemy)
                 {
                     lives--;
-                    //Game1.PlayerLostLife();
+                    Game1.PlayerLostLife();
                 }
 
             }
