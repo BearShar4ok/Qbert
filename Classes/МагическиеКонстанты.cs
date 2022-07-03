@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QBert.Classes
 {
-    class МагическиеКонстантыДляВани
+    class МагическиеКонстанты
     {
 
     }

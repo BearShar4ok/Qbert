@@ -53,7 +53,7 @@ namespace QBert.Classes
 
         public void ChangeTopColor(bool toNext)
         {
-            top_color_index = !toNext || top_color_index == 2 ? 0 : top_color_index + 1;
+            top_color_index = !toNext ? 0 : top_color_index + 1;
         }
     }
 }
