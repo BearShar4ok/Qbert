@@ -24,7 +24,7 @@ namespace QBert.Classes.Enemies
         protected bool hasJumped = false;
         public bool IsAlive { get;  set; } = true;
 
-        public JumpManager enemyJump { get; set; } = new JumpManager();
+        public JumpManager enemyJumpManager { get; set; } = new JumpManager();
 
         public virtual int IndexX { get { return indexX; } }
         public virtual int IndexY { get { return indexY; } }
@@ -43,20 +43,20 @@ namespace QBert.Classes.Enemies
         }
         public virtual void Update(GameTime gametime, Vector2 playerIndexes = default)
         {
-            if (enemyJump != null && enemyJump.NowJumpState == JumpStates.inJump)
+            if (enemyJumpManager != null && enemyJumpManager.NowJumpState == JumpStates.inJump)
             {
-                enemyJump.Update(gametime);
-                position = enemyJump.position;
+                enemyJumpManager.Update(gametime);
+                position = enemyJumpManager.position;
             }
 
-            if (hasJumped && enemyJump.NowJumpState == JumpStates.readyToJump)
+            if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
                 hasJumped = false;
                 Game1.Cells[indexY][indexX].objectStatechanged(this);
             }
 
            
-            if (enemyJump.NowJumpState == JumpStates.readyToJump)
+            if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
                 spriteIndex = 0;
                 jumpTimer--;
@@ -64,7 +64,7 @@ namespace QBert.Classes.Enemies
                 {
                     Game1.Cells[indexY][indexX].objectStatechanged("cube");
                     indexY--;
-                    if (indexY < 0 && enemyJump.NowJumpState == JumpStates.readyToJump)
+                    if (indexY < 0 && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
                     {
                         IsAlive = false;
                         return;
@@ -79,15 +79,15 @@ namespace QBert.Classes.Enemies
                         }
                         else if (indexY == 0 && !(this is PurpleCircle))
                         {
-                            enemyJump.TimeToEnd = 0.8f;
-                            enemyJump.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
+                            enemyJumpManager.TimeToEnd = 0.8f;
+                            enemyJumpManager.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
                         }
                         else
                         {
 
-                            enemyJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
+                            enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
                         }

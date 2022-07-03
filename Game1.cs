@@ -16,7 +16,7 @@ namespace QBert
 
         public static Action PlayerSteppedOnPlatform = MakePlatformMove;
         public static Action PlayerDroppedFromPlatform = MakePlatformEndJourney;
-        public static Action PlayerLostLife = ContinueRoundWithLessHealth;
+        public static Action PlayerLostLife = () => { playerFreezesAll = 2000f;  };
 
         private static List<List<List<Color>>> colors = new List<List<List<Color>>>()
         {
@@ -61,7 +61,7 @@ namespace QBert
         //private CoolEnemy coolEnemy;
         //private List<GreenCircle> greenCircles = new List<GreenCircle>();
         // private Snake snake;
-        private static Player player;
+        private static Qbert player;
         private Texture2D arcadeBackground;
         private Texture2D arcadeBackgroundFooter;
         private static List<Platform> platforms;
@@ -120,7 +120,7 @@ namespace QBert
                 }
             }
             enemies = new List<Enemy>();
-            player = new Player(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
+            player = new Qbert(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
             platforms = new List<Platform>() { new Platform(0, 4), new Platform(4, 5) };
 
             enemies.Add(new RedCircle());
@@ -170,7 +170,7 @@ namespace QBert
             // TODO: Add your update logic here
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (!enemies[i].IsAlive && enemies[i].enemyJump.NowJumpState == JumpStates.readyToJump)
+                if (!enemies[i].IsAlive && enemies[i].enemyJumpManager.NowJumpState == JumpStates.readyToJump)
                 {
                     enemies.RemoveAt(i);
                     i--;
@@ -209,6 +209,13 @@ namespace QBert
                 {
                     playerFreezesAll = 0;
                     foreach (Enemy enemy in enemies) enemy.IsAlive = false;
+                    foreach (List<Cell> c in Cells)
+                    {
+                        foreach (Cell cell in c)
+                        {
+                            if (cell.CellState == CellStates.enemy || cell.CellState == CellStates.platform) cell.objectStatechanged("1");
+                        }
+                    }
                 }
                 else return;
             }
@@ -274,14 +281,7 @@ namespace QBert
 
             if (snake != null)
             {
-                if (!snake.IsAlive)
-                {
-                    if (snake.enemyJump.IsFall)
-                    {
-                        int a = 10;
-                    }
-                }
-                if (snake.IsAlive || (!snake.IsAlive && !snake.enemyJump.IsFall && !snake.IsDyingDown) || (!snake.IsAlive && snake.IsDyingDown))
+                if (snake.IsAlive || (!snake.IsAlive && !snake.enemyJumpManager.IsFall && !snake.IsDyingDown) || (!snake.IsAlive && snake.IsDyingDown))
                 {
                     drawList.Add(snake);
                 }
@@ -341,12 +341,6 @@ namespace QBert
             player.IndexX = 1;
             player.IndexY = 7;
         }
-        private void DrawCubes()
-        {
-
-
-
-        }
 
         private static void MakePlatformMove()
         {
@@ -366,7 +360,7 @@ namespace QBert
 
         private static void ContinueRoundWithLessHealth()
         {
-            playerFreezesAll = 2000f;
+            
         }
     }
 }
