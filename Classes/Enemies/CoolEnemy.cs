@@ -24,7 +24,7 @@ namespace QBert.Classes.Enemies
             return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 30, Game1.Cells[indexY][indexX].Rect_top.Y);
         }
 
-        public override void Update(GameTime gametime,Vector2 playerIndexes)
+        public override void Update(GameTime gametime, Vector2 playerIndexes)
         {
             if (enemyJump != null && enemyJump.NowJumpState == JumpStates.inJump)
             {
@@ -45,6 +45,7 @@ namespace QBert.Classes.Enemies
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
+                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
                     if (indexY == 1) return;
                     indexY--;
                     int direction = random.Next(0, 2);
@@ -53,6 +54,7 @@ namespace QBert.Classes.Enemies
                     enemyJump.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                     jumpTimer = 20;
                     hasColoredCube = false;
+                    Game1.Cells[indexY][indexX].objectStatechanged(this);
                 }
             }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);

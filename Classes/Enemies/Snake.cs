@@ -36,16 +36,25 @@ namespace QBert.Classes.Enemies
                 position = enemyJump.position;
             }
 
+            if (hasJumped && enemyJump.NowJumpState == JumpStates.readyToJump)
+            {
+                hasJumped = false;
+                Game1.Cells[indexY][indexX].objectStatechanged(this);
+            }
+
             if (enemyJump.NowJumpState == JumpStates.readyToJump)
             {
-
                 jumpTimer--;
                 spriteIndex -= spriteIndex % 2;
                 if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
                 {
+                    hasJumped = true;
+                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
                     Follow(playerIndexes);
                     if (Game1.Cells[indexY][indexX].CellState == CellStates.air || Game1.Cells[indexY][indexX].CellState == CellStates.platform)
                     {
+                        snakeJump.TimeToEnd = 1.2f;
+                        snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, 1300), position, JumpStates.inJump);
                         IsAlive = false;
                         enemyJump.TimeToEnd = 1.2f;
                         int x = 100;

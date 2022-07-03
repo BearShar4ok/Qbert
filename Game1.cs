@@ -16,6 +16,7 @@ namespace QBert
 
         public static Action PlayerSteppedOnPlatform = MakePlatformMove;
         public static Action PlayerDroppedFromPlatform = MakePlatformEndJourney;
+        public static Action PlayerLostLife = ContinueRoundWithLessHealth;
 
         private static List<List<List<Color>>> colors = new List<List<List<Color>>>()
         {
@@ -53,6 +54,8 @@ namespace QBert
         private int cube_coord_y;
         private int cube_width = 100;
         private int cube_height = 100;
+        private static float platformFreezesAll = 0;
+        private static float playerFreezesAll = 0;
         //private List<RedCircle> redCircles = new List<RedCircle>();
         //private PurpleCircle purpleCircle;
         //private CoolEnemy coolEnemy;
@@ -174,12 +177,43 @@ namespace QBert
                 }
             }
 
-            player.Update(gameTime);
-
             for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].Update(gameTime);
             }
+
+            if (platformFreezesAll > 0)
+            {
+                platformFreezesAll -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                
+                if (platformFreezesAll <= 0)
+                {
+                    platformFreezesAll = 0;
+                    for (int i = 0; i < platforms.Count; i++)
+                    {
+                        if (platforms[i].HasGone)
+                        {
+                            platforms.Remove(platforms[i]);
+                            break;
+                        }
+                    }
+                    player.StartFalling();
+                }
+                else return;
+            }
+
+            if (playerFreezesAll > 0)
+            {
+                playerFreezesAll -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (playerFreezesAll <= 0)
+                {
+                    playerFreezesAll = 0;
+                    foreach (Enemy enemy in enemies) enemy.IsAlive = false;
+                }
+                else return;
+            }
+
+            player.Update(gameTime);
 
             foreach (Enemy enemy in enemies)
             {
@@ -199,7 +233,7 @@ namespace QBert
 
             if (AllCubesColored()) StartNewRound();
 
-            HUD.Update(player.Score);
+            HUD.Update(player.Score, player.Lives);
 
             base.Update(gameTime);
         }
@@ -322,15 +356,17 @@ namespace QBert
 
         private static void MakePlatformEndJourney()
         {
-            for (int i = 0; i < platforms.Count; i++)
+            foreach (Enemy enemy in enemies)
             {
-                if (platforms[i].HasGone)
-                {
-                    platforms.Remove(platforms[i]);
-                    break;
-                }
+                if (!(enemy is Snake)) enemy.IsAlive = false;
             }
-            player.StartFalling();
+
+            platformFreezesAll = 1000f;
+        }
+
+        private static void ContinueRoundWithLessHealth()
+        {
+            playerFreezesAll = 2000f;
         }
     }
 }

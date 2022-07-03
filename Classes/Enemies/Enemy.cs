@@ -21,7 +21,8 @@ namespace QBert.Classes.Enemies
         protected int spriteIndex;
         protected int jumpTimer = 20;
         protected string textureName;
-        public bool IsAlive { get; set; } = true;
+        protected bool hasJumped = false;
+        public bool IsAlive { get;  set; } = true;
 
         public JumpManager enemyJump { get; set; } = new JumpManager();
 
@@ -48,12 +49,20 @@ namespace QBert.Classes.Enemies
                 position = enemyJump.position;
             }
 
+            if (hasJumped && circleJump.NowJumpState == JumpStates.readyToJump)
+            {
+                hasJumped = false;
+                Game1.Cells[indexY][indexX].objectStatechanged(this);
+            }
+
+           
             if (enemyJump.NowJumpState == JumpStates.readyToJump)
             {
                 spriteIndex = 0;
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
+                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
                     indexY--;
                     if (indexY < 0 && enemyJump.NowJumpState == JumpStates.readyToJump)
                     {
@@ -62,8 +71,8 @@ namespace QBert.Classes.Enemies
                     }
                     else
                     {
-
                         indexX += random.Next(0, 2);
+                        hasJumped = true;
                         if (indexY == 0 && this is PurpleCircle)
                         {
                             return;
@@ -83,7 +92,7 @@ namespace QBert.Classes.Enemies
                             jumpTimer = 20;
                         }
                     }
-
+                    Game1.Cells[indexY][indexX].objectStatechanged(this);
                 }
             }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);

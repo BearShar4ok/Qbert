@@ -12,6 +12,7 @@ namespace QBert.Classes
     class Player : IDrawableOur
     {
         private int score = 0;
+        private int lives = 3;
 
         private Vector2 position;
         private Vector2 targetPosition;
@@ -35,6 +36,7 @@ namespace QBert.Classes
 
         public Vector2 Position { get { return position; } set { position = value; } }
         public int Score { get { return score; } set { score = value; } }
+        public int Lives { get { return lives; } set { lives = value; } }
         public int IndexX { get { return indexX; } set { indexX = value; } }
         public int IndexY { get { return indexY; } set { indexY = value; } }
         public float MaxMoveTime { get { return maxMoveTime; } set { maxMoveTime = value; } }
@@ -83,6 +85,13 @@ namespace QBert.Classes
                     hasChangedCubeColor = true;
                 }
                 spriteIndex -= spriteIndex % 2;
+
+                if (Game1.Cells[indexY][indexX].CellState == CellStates.enemy)
+                {
+                    lives--;
+                    Game1.PlayerLostLife();
+                }
+
             }
 
             if (Game1.Cells[IndexY][IndexX].CellState == CellStates.platform && playerJump.NowJumpState == JumpStates.readyToJump && PlayerState != PlayerStates.onPlatform)
