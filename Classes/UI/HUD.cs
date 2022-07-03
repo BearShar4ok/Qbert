@@ -37,11 +37,13 @@ namespace QBert.Classes.UI
             new Label("LEVEL:", new Vector2(680 + leftBorderX,  topBorderY), Color.Green, "font28"),
             new Label("1", new Vector2(830 + leftBorderX,  topBorderY), Color.DarkOrange, "font28"),
             new Label("ROUND:", new Vector2(680 + leftBorderX, 50 + topBorderY), Color.DeepPink, "font28"),
-            new Label("1", new Vector2(830 + leftBorderX, 50 + topBorderY), Color.DarkOrange, "font28")
+            new Label("1", new Vector2(830 + leftBorderX, 50 + topBorderY), Color.DarkOrange, "font28"),
+            new Label("Lives:", new Vector2(120 + leftBorderX, 100 + topBorderY), Color.Green, "font28"),
+            new Label("3", new Vector2(120 + leftBorderX, 150 + topBorderY), Color.Green, "font28")
             };
         }
 
-        public static void Update(int playerScore)
+        public static void Update(int playerScore, int playerHealth)
         {
             if (score == playerScore) return;
 
@@ -49,6 +51,7 @@ namespace QBert.Classes.UI
             labels[1].Text = score.ToString();
             labels[3].Text = level.ToString();
             labels[5].Text = round.ToString();
+            labels[7].Text = playerHealth.ToString();
         }
 
         public static void LoadContent(ContentManager manager)

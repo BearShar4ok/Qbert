@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using QBert.Classes.Enemies;
 
 namespace QBert.Classes
 {
@@ -40,6 +41,14 @@ namespace QBert.Classes
                 if (obj is Platform)
                 {
                     CellState = CellStates.platform;
+                }
+                if (obj is Enemy)
+                {
+                    CellState = CellStates.enemy;
+                }
+                if (obj.ToString() == "cube")
+                {
+                    CellState = CellStates.cube;
                 }
             }; 
         }

@@ -10,12 +10,12 @@ namespace QBert.Classes.Enemies
 {
     class Snake : Enemy
     {
-        private JumpManager snakeJump;
+        private JumpManager enemyJump;
 
         public Snake()
         {
             position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70);
-            snakeJump = new JumpManager();
+            enemyJump = new JumpManager();
             textureName = "purpleSnake";
             indexX = 1;
             indexY = 2;
@@ -29,28 +29,35 @@ namespace QBert.Classes.Enemies
         }
         public override void Update( GameTime gametime, Vector2 playerIndexes)
         {
-            if (snakeJump != null && snakeJump.NowJumpState == JumpStates.inJump)
+            if (enemyJump != null && enemyJump.NowJumpState == JumpStates.inJump)
             {
-                snakeJump.Update(gametime);
-                position = snakeJump.position;
+                enemyJump.Update(gametime);
+                position = enemyJump.position;
             }
 
-            if (snakeJump.NowJumpState == JumpStates.readyToJump)
+            if (hasJumped && enemyJump.NowJumpState == JumpStates.readyToJump)
             {
+                hasJumped = false;
+                Game1.Cells[indexY][indexX].objectStatechanged(this);
+            }
 
+            if (enemyJump.NowJumpState == JumpStates.readyToJump)
+            {
                 jumpTimer--;
                 spriteIndex -= spriteIndex % 2;
                 if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
                 {
+                    hasJumped = true;
+                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
                     Follow(playerIndexes);
                     if (Game1.Cells[indexY][indexX].CellState == CellStates.air)
                     {
-                        snakeJump.TimeToEnd = 1.2f;
-                        snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, 1300), position, JumpStates.inJump);
+                        enemyJump.TimeToEnd = 1.2f;
+                        enemyJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, 1300), position, JumpStates.inJump, "snake");
                         IsAlive = false;
                     }
                     else
-                        snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position, JumpStates.inJump);
+                        enemyJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position, JumpStates.inJump, "snake");
                     jumpTimer = 20;
                 }
             }
