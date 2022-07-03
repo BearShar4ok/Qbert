@@ -41,7 +41,7 @@ namespace QBert.Classes.Enemies
             if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
                 hasJumped = false;
-                Game1.Cells[indexY][indexX].objectStatechanged(this);
+                Game1.Cells[indexY][indexX].ObjectStatechanged(this);
             }
 
             if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
@@ -55,7 +55,7 @@ namespace QBert.Classes.Enemies
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
-                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
+                    Game1.Cells[indexY][indexX].ObjectStatechanged("cube");
 
                     indexY--;
                     if (indexY < 0 && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
@@ -86,7 +86,7 @@ namespace QBert.Classes.Enemies
                     }
                     
                     
-                    Game1.Cells[indexY][indexX].objectStatechanged(this);
+                    //Game1.Cells[indexY][indexX].ObjectStatechanged(this);
                 }
             }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);

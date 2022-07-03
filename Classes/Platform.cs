@@ -43,7 +43,7 @@ namespace QBert.Classes
         {
             texture = manager.Load<Texture2D>("platform");
             position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y + 20);
-            Game1.Cells[indexY][indexX].objectStatechanged(this);
+            Game1.Cells[indexY][indexX].ObjectStatechanged(this);
         }
 
         public void Update(GameTime gameTime)

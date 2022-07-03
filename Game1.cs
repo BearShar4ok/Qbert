@@ -120,7 +120,7 @@ namespace QBert
                          new Rectangle(Cells[i][j].X - 3, Cells[i][j].Y + 25, 50, 73))
                         { Top_colors = colors[round][0], Left_color = colors[round][1][0], Right_color = colors[round][2][0] };
                         cubes[i - 1].Add(cube);
-                        cell.objectStatechanged(cube);
+                        cell.ObjectStatechanged(cube);
                     }
                 }
             }
@@ -224,7 +224,7 @@ namespace QBert
                     {
                         foreach (Cell cell in c)
                         {
-                            if (cell.CellState == CellStates.enemy) cell.objectStatechanged("cube");
+                            if (cell.CellState == CellStates.enemy) cell.ObjectStatechanged("cube");
                         }
                     }
                 }
@@ -257,8 +257,8 @@ namespace QBert
                 }
             }
 
-            if (AllCubesColored()) StartNewRound();
-
+            if (AllCubesColored()) 
+                StartNewRound();
             HUD.Update(player.Score, player.Lives);
 
             base.Update(gameTime);
@@ -382,7 +382,7 @@ namespace QBert
                          new Rectangle(Cells[i][j].X - 3, Cells[i][j].Y + 25, 50, 73))
                         { Top_colors = colors[round][0], Left_color = colors[round][1][0], Right_color = colors[round][2][0] };
                         cubes[i - 1].Add(cube);
-                        cell.objectStatechanged(cube);
+                        cell.ObjectStatechanged(cube);
                     }
                 }
             }

@@ -56,11 +56,12 @@ namespace QBert.Classes.Enemies
                 position = enemyJumpManager.position;
             }
 
-            if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
-            {
-                hasJumped = false;
-                Game1.Cells[indexY][indexX].objectStatechanged(this);
-            }
+            
+            //if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+            //{
+            //    hasJumped = false;
+            //    Game1.Cells[indexY][indexX].ObjectStatechanged(this);
+            //}
 
            
             if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
@@ -70,7 +71,7 @@ namespace QBert.Classes.Enemies
                 if (jumpTimer == 0)
                 {
                     hasJumped = true;
-                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
+                    Game1.Cells[indexY][indexX].ObjectStatechanged("cube");
                     indexY--;
                     if (indexY < 0 && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
                     {
@@ -100,8 +101,13 @@ namespace QBert.Classes.Enemies
                             jumpTimer = 20;
                         }
                     }
-                    Game1.Cells[indexY][indexX].objectStatechanged(this);
+                    //Game1.Cells[indexY][indexX].ObjectStatechanged(this);
                 }
+            }
+            if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+            {
+                hasJumped = false;
+                Game1.Cells[indexY][indexX].ObjectStatechanged(this);
             }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
         }

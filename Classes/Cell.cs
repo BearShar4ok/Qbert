@@ -20,7 +20,7 @@ namespace QBert.Classes
         public int X { get; private set; }
         public int Y { get; private set; }
 
-        public Action<object> objectStatechanged;
+        public Action<object> ObjectStatechanged;
 
         public Rectangle Rect_top { get { return rect_top; } set { rect_top = value; } }
 
@@ -31,7 +31,7 @@ namespace QBert.Classes
             X = rect_cube.X;
             Y = rect_cube.Y;
             objectContains = null;
-            objectStatechanged = (obj) => {
+            ObjectStatechanged = (obj) => {
                 CellState = CellStates.air;
                 objectContains = obj;
                 if (obj is Cube)

@@ -45,7 +45,7 @@ namespace QBert.Classes.UI
 
         public static void Update(int playerScore, int playerHealth)
         {
-            if (score == playerScore) return;
+            //if (score == playerScore) return;
 
             score = playerScore;
             labels[1].Text = score.ToString();

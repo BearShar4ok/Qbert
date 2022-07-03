@@ -35,21 +35,14 @@ namespace QBert.Classes.Enemies
                 enemyJumpManager.Update(gametime);
                 position = enemyJumpManager.position;
             }
-
-            if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
-            {
-                hasJumped = false;
-                Game1.Cells[indexY][indexX].objectStatechanged(this);
-            }
-
-            if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+            else if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
                 jumpTimer--;
                 spriteIndex -= spriteIndex % 2;
                 if (jumpTimer == 0 && !(playerIndexes.X == indexX && playerIndexes.Y == indexY))
                 {
                     hasJumped = true;
-                    Game1.Cells[indexY][indexX].objectStatechanged("cube");
+                    Game1.Cells[indexY][indexX].ObjectStatechanged("cube");
                     Follow(playerIndexes);
                     if (Game1.Cells[indexY][indexX].CellState == CellStates.air || Game1.Cells[indexY][indexX].CellState == CellStates.platform)
                     {
@@ -66,7 +59,11 @@ namespace QBert.Classes.Enemies
                     jumpTimer = 20;
                 }
             }
-
+            if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+            {
+                hasJumped = false;
+                Game1.Cells[indexY][indexX].ObjectStatechanged(this);
+            }
             sourceRectangle = new Rectangle(sprite_width * spriteIndex, 0, sprite_width, sprite_height);
         }
         public void Follow(Vector2 playerIndexes)
