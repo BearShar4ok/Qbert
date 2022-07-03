@@ -47,16 +47,16 @@ namespace QBert.Classes.Enemies
                     if (Game1.Cells[indexY][indexX].CellState == CellStates.air || Game1.Cells[indexY][indexX].CellState == CellStates.platform)
                     {
                         IsAlive = false;
-                        enemyJumpManager.TimeToEnd = 1.2f;
                         int x = 100;
                         if (!isRight)
                             x = -100;
                         enemyJumpManager.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20 + x, 1300), position, JumpStates.inJump);
+                        enemyJumpManager.TimeToEnd = 1.2f;
                         IsDyingDown = IsDyingDown;
                     }
                     else
                         enemyJumpManager.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70), position, JumpStates.inJump);
-                    jumpTimer = 20;
+                    jumpTimer = 30;
                 }
             }
             if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)

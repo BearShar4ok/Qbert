@@ -15,7 +15,7 @@ namespace QBert.Classes.Enemies
         {
             position = CountPositionByIndex();
             sprite_width = 38;
-            sprite_height = 40;
+            sprite_height = 30;
             spriteIndex = 4;
             textureName = "coolEnemy1";
         }
@@ -38,7 +38,7 @@ namespace QBert.Classes.Enemies
                 enemyJumpManager.Update(gametime);
                 position = enemyJumpManager.position;
             }
-            if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+            if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
                 hasJumped = false;
                 Game1.Cells[indexY][indexX].ObjectStatechanged(this);
@@ -72,17 +72,15 @@ namespace QBert.Classes.Enemies
                         hasColored = false;
                         if (indexY == 0)
                         {
-                            enemyJumpManager.TimeToEnd = 0.8f;
                             enemyJumpManager.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
+                            enemyJumpManager.TimeToEnd = 0.8f;
                             spriteIndex = 1;
                         }
                         else
                         {
                             enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                         }
-
-
-                        jumpTimer = 20;
+                        jumpTimer = 43;
                     }
                     
                     

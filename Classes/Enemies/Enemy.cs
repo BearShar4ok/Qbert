@@ -20,7 +20,7 @@ namespace QBert.Classes.Enemies
         protected int sprite_width;
         protected int sprite_height;
         protected int spriteIndex;
-        protected int jumpTimer = 20;
+        protected int jumpTimer = 30;
         protected string textureName;
         protected bool hasJumped = false;
         public bool IsAlive { get;  set; } = true;
@@ -89,16 +89,16 @@ namespace QBert.Classes.Enemies
                         }
                         else if (indexY == 0 && !(this is PurpleCircle))
                         {
-                            enemyJumpManager.TimeToEnd = 0.8f;
                             enemyJumpManager.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
+                            enemyJumpManager.TimeToEnd = 0.8f;
                             spriteIndex = 1;
-                            jumpTimer = 20;
+                            jumpTimer = 30;
                         }
                         else
                         {
                             enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                             spriteIndex = 1;
-                            jumpTimer = 20;
+                            jumpTimer = 30;
                         }
                     }
                     //Game1.Cells[indexY][indexX].ObjectStatechanged(this);
