@@ -13,8 +13,8 @@ namespace QBert.Classes.Enemies
         public GreenCircle() : base()
         {
             position = CountPositionByIndex();
-            sprite_width = 49;
-            sprite_height = 30;
+            sprite_width = 33;
+            sprite_height = 20;
             spriteIndex = 1;
             textureName = "greenCircle";
         }
@@ -25,7 +25,7 @@ namespace QBert.Classes.Enemies
 
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 25, Game1.Cells[indexY][indexX].Rect_top.Y + 10);
+            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 35, Game1.Cells[indexY][indexX].Rect_top.Y + 20);
         }
     }
 }

@@ -167,7 +167,7 @@ namespace QBert
             HUD.LoadContent(Content);
         }
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)//game1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();

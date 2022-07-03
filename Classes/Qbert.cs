@@ -64,11 +64,15 @@ namespace QBert.Classes
         {
             if (position.Y >= 1100 && !IsPlayerLive)
             {
+                //IsPlayerLive = true;
+                lives--;
                 Game1.PlayerLostLife();
                 indexX = 1;
                 indexY = 7;
                 position.Y = Game1.Cells[indexY][indexX].Rect_top.Y + magicConstY;
                 position.X = Game1.Cells[indexY][indexX].Rect_top.X + magicConstX;
+                //playerJump.UpdateTargetPosition(position,position,JumpStates)
+                playerJump.NowJumpState = JumpStates.readyToJump;
             }
 
             if (playerJump != null && playerJump.NowJumpState == JumpStates.inJump)
