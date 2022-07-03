@@ -48,12 +48,14 @@ namespace QBert
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private Random random;
         private int level = 0;
         private int round = 0;
         private int cube_coord_x;
         private int cube_coord_y;
         private int cube_width = 100;
         private int cube_height = 100;
+        private float spawnTimer = 2000f;
         private static float platformFreezesAll = 0;
         private static float playerFreezesAll = 0;
         //private List<RedCircle> redCircles = new List<RedCircle>();
@@ -89,6 +91,9 @@ namespace QBert
             cube_coord_x = (_graphics.PreferredBackBufferWidth / 2 - cube_width / 2 - cube_width * 3) - cube_width - 18;
             cube_coord_y = _graphics.PreferredBackBufferHeight - 350;
 
+            random = new Random();
+
+
             int amountCellsInLine = 9;
             for (int i = 0; amountCellsInLine >= i; i++)
             {
@@ -123,11 +128,11 @@ namespace QBert
             player = new Qbert(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
             platforms = new List<Platform>() { new Platform(0, 4), new Platform(4, 5) };
 
-            enemies.Add(new RedCircle());
-            enemies.Add(new GreenCircle());
-            enemies.Add(new PurpleCircle());
-            enemies.Add(new Snake());
-            enemies.Add(new CoolEnemy());
+            //enemies.Add(new RedCircle());
+            //enemies.Add(new GreenCircle());
+            //enemies.Add(new PurpleCircle());
+            //enemies.Add(new Snake());
+            //enemies.Add(new CoolEnemy());
 
             base.Initialize();
         }
@@ -168,6 +173,8 @@ namespace QBert
                 Exit();
 
             // TODO: Add your update logic here
+            spawnTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (!enemies[i].IsAlive && enemies[i].enemyJumpManager.NowJumpState == JumpStates.readyToJump)
@@ -208,17 +215,29 @@ namespace QBert
                 if (playerFreezesAll <= 0)
                 {
                     playerFreezesAll = 0;
-                    foreach (Enemy enemy in enemies) enemy.IsAlive = false;
+                    foreach (Enemy enemy in enemies)
+                    {
+                        enemy.IsAlive = false;
+                    }
+                    enemies.Clear();
                     foreach (List<Cell> c in Cells)
                     {
                         foreach (Cell cell in c)
                         {
-                            if (cell.CellState == CellStates.enemy) cell.objectStatechanged("1");
+                            if (cell.CellState == CellStates.enemy) cell.objectStatechanged("cube");
                         }
                     }
                 }
                 else return;
             }
+
+            if (spawnTimer <= 0)
+            {
+                SpawnEnemy();
+                spawnTimer = 2000f;
+            }
+
+            UpgradePurpleCircleToSnake();
 
             player.Update(gameTime);
 
@@ -337,7 +356,38 @@ namespace QBert
             Cells.Clear();
             enemies.Clear();
 
-            Initialize();
+            int amountCellsInLine = 9;
+            for (int i = 0; amountCellsInLine >= i; i++)
+            {
+                Cells.Add(new List<Cell>());
+                if (i != 0 && i != 9 && i != 8)
+                {
+                    cubes.Add(new List<Cube>());
+                }
+
+                for (int j = 0; j <= amountCellsInLine - i; j++)
+                {
+                    Cell cell = new Cell(
+                        new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amountCellsInLine) * j, cube_coord_y - (i) * (cube_height - 27), 100, 100),
+                         new Rectangle(cube_coord_x + (cube_width / 2 - 2) * (i) + (cube_width - amountCellsInLine) * j - 2, cube_coord_y - (i) * (cube_height - 27), 95, 50)
+                    );
+                    Cells[i].Add(cell);
+
+                    Cube cube;
+                    if (j > 0 && j < amountCellsInLine - i && i != 0 && i != 9 && i != 8)
+                    {
+                        cube = new Cube(
+                         new Rectangle(Cells[i][j].X - 2, Cells[i][j].Y, 95, 50),
+                         new Rectangle(Cells[i][j].X + 45, Cells[i][j].Y + 25, 47, 73),
+                         new Rectangle(Cells[i][j].X - 3, Cells[i][j].Y + 25, 50, 73))
+                        { Top_colors = colors[round][0], Left_color = colors[round][1][0], Right_color = colors[round][2][0] };
+                        cubes[i - 1].Add(cube);
+                        cell.objectStatechanged(cube);
+                    }
+                }
+            }
+
+
             player.IndexX = 1;
             player.IndexY = 7;
         }
@@ -358,9 +408,73 @@ namespace QBert
             platformFreezesAll = 1000f;
         }
 
-        private static void ContinueRoundWithLessHealth()
+        private void SpawnEnemy()
         {
-            
+            List<SpawnableEnemies> spawnableEnemies = new List<SpawnableEnemies>() 
+            { 
+                SpawnableEnemies.redBall,
+                SpawnableEnemies.greenBall,
+                SpawnableEnemies.purpleBall,
+                SpawnableEnemies.coolEnemy
+            };
+            foreach (Enemy enemy in enemies)
+            {
+                if ((enemy is Snake || enemy is PurpleCircle) && spawnableEnemies.Contains(SpawnableEnemies.purpleBall))
+                {
+                    spawnableEnemies.Remove(SpawnableEnemies.purpleBall);
+                }
+                if (enemy is GreenCircle && spawnableEnemies.Contains(SpawnableEnemies.greenBall))
+                {
+                    spawnableEnemies.Remove(SpawnableEnemies.greenBall);
+                }
+                if (enemy is CoolEnemy && spawnableEnemies.Contains(SpawnableEnemies.coolEnemy))
+                {
+                    spawnableEnemies.Remove(SpawnableEnemies.coolEnemy);
+                }
+            }
+
+            SpawnableEnemies enemy1 = spawnableEnemies[random.Next(spawnableEnemies.Count)];
+
+            switch (enemy1)
+            {
+                case SpawnableEnemies.redBall:
+                    RedCircle red = new RedCircle();
+                    red.LoadContent(Content);
+                    enemies.Add(red);
+                    break;
+                case SpawnableEnemies.greenBall:
+                    GreenCircle green = new GreenCircle();
+                    green.LoadContent(Content);
+                    enemies.Add(green);
+                    break;
+                case SpawnableEnemies.purpleBall:
+                    PurpleCircle purple = new PurpleCircle();
+                    purple.LoadContent(Content);
+                    enemies.Add(purple);
+                    break;
+                case SpawnableEnemies.coolEnemy:
+                    CoolEnemy cool = new CoolEnemy();
+                    cool.LoadContent(Content);
+                    enemies.Add(cool);
+                    break;
+            }
+        }
+
+        private void UpgradePurpleCircleToSnake()
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i] is PurpleCircle purple && purple.HasReachedBottom)
+                {
+                    Snake snake = new Snake(enemies[i].PrevIndexX, enemies[i].IndexY + 1);
+                    snake.LoadContent(Content);
+                    enemies.Add(snake);
+
+                    enemies.RemoveAt(i);
+
+                    break;
+                }
+            }
         }
     }
 }

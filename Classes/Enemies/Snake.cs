@@ -13,16 +13,16 @@ namespace QBert.Classes.Enemies
         private bool isRight;
         public bool IsDyingDown { get; private set; } = false;
 
-        public Snake()
+        public Snake(int indexX, int indexY)
         {
             position = new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, Game1.Cells[indexY][indexX].Rect_top.Y - 70);
             enemyJumpManager = new JumpManager();
             textureName = "purpleSnake";
-            indexX = 1;
-            indexY = 2;
             sprite_width = 50;
             sprite_height = 100;
             spriteIndex = 5;
+            this.indexX = indexX;
+            this.indexY = indexY;
         }
         public override void Draw(SpriteBatch brush)
         {

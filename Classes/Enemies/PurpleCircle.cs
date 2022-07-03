@@ -10,6 +10,7 @@ namespace QBert.Classes.Enemies
 {
     class PurpleCircle : Enemy
     {
+        public bool HasReachedBottom { get; set; } = false;
         public PurpleCircle() : base()
         {
             position = CountPositionByIndex();
@@ -21,7 +22,7 @@ namespace QBert.Classes.Enemies
 
         public override Vector2 CountPositionByIndex()
         {
-            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 25, Game1.Cells[indexY][indexX].Rect_top.Y + 5);
+            return new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 25, Game1.Cells[indexY][indexX].Rect_top.Y + 10);
         }
     }
 }

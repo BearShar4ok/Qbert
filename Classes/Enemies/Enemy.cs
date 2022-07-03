@@ -14,6 +14,7 @@ namespace QBert.Classes.Enemies
         protected Vector2 position;
         protected Texture2D texture;
         protected int indexX = 1;
+        protected int prevIndexX;
         protected int indexY = 6;
         protected Rectangle sourceRectangle;
         protected int sprite_width;
@@ -28,6 +29,7 @@ namespace QBert.Classes.Enemies
 
         public virtual int IndexX { get { return indexX; } }
         public virtual int IndexY { get { return indexY; } }
+        public virtual int PrevIndexX { get { return prevIndexX; } }
 
         public Enemy()
         {
@@ -67,6 +69,7 @@ namespace QBert.Classes.Enemies
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
+                    hasJumped = true;
                     Game1.Cells[indexY][indexX].objectStatechanged("cube");
                     indexY--;
                     if (indexY < 0 && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
@@ -76,10 +79,11 @@ namespace QBert.Classes.Enemies
                     }
                     else
                     {
+                        prevIndexX = indexX;
                         indexX += random.Next(0, 2);
-                        hasJumped = true;
                         if (indexY == 0 && this is PurpleCircle)
                         {
+                            (this as PurpleCircle).HasReachedBottom = true;
                             return;
                         }
                         else if (indexY == 0 && !(this is PurpleCircle))
@@ -91,7 +95,6 @@ namespace QBert.Classes.Enemies
                         }
                         else
                         {
-
                             enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
                             spriteIndex = 1;
                             jumpTimer = 20;
