@@ -18,6 +18,7 @@ namespace QBert.Classes
         private Vector2 startPos;
         private float timeToEnd = 0.4f;
         private float nowTime;
+        private float prevTime;
 
         private float g = 2000f;
 
@@ -56,9 +57,14 @@ namespace QBert.Classes
         private void FreeFall(GameTime gametime)
         {
             nowTime += (float)gametime.ElapsedGameTime.TotalSeconds;
-            if (nowTime <= timeToEnd)
+            if (position.Y<= targetPos.Y)//nowTime <= timeToEnd
             {
-                position.Y = startPos.Y + g * nowTime * nowTime / 2;
+                float deltaY = (g * nowTime * nowTime / 2) - (g * prevTime * prevTime / 2);
+                if (deltaY > targetPos.Y - position.Y)
+                    position.Y = targetPos.Y;
+                else
+                    position.Y += deltaY;
+
             }
             else
             {
@@ -71,6 +77,7 @@ namespace QBert.Classes
             IsFall = prevPosition.Y < position.Y;
 
             prevPosition = position;
+            prevTime = nowTime;
         }
         private void Jump(GameTime gametime)
         {
