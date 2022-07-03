@@ -214,7 +214,7 @@ namespace QBert.Classes
                     playerJump.TimeToEnd = 1.2f;
                 else
                     playerJump.TimeToEnd = 0.8f;
-                targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + x, screenHeight + texture.Height);
+                targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + x, 1101);
                 IsPlayerLive = false;
             }
             return targetPos;
