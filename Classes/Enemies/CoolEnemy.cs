@@ -10,6 +10,7 @@ namespace QBert.Classes.Enemies
 {
     class CoolEnemy : Enemy
     {
+        private bool hasColored = false;
         public CoolEnemy() : base()
         {
             position = CountPositionByIndex();
@@ -32,27 +33,59 @@ namespace QBert.Classes.Enemies
 
                 if (enemyJumpManager.NowTime >= 0.13f && spriteIndex % 4 == 0) spriteIndex++;
             }
+            if (enemyJumpManager.NowJumpState == JumpStates.freeFall)
+            {
+                enemyJumpManager.Update(gametime);
+                position = enemyJumpManager.position;
+            }
+            if (hasJumped && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+            {
+                hasJumped = false;
+                Game1.Cells[indexY][indexX].objectStatechanged(this);
+            }
 
             if (enemyJumpManager.NowJumpState == JumpStates.readyToJump)
             {
-                if (!hasJumped)
+                if (!hasColored && indexY > 0)
                 {
                     Game1.cubes[indexY - 1][indexX - 1].ChangeTopColor(true);
-                    hasJumped = true;
+                    hasColored = true;
                 }
 
                 jumpTimer--;
                 if (jumpTimer == 0)
                 {
                     Game1.Cells[indexY][indexX].objectStatechanged("cube");
-                    if (indexY == 1) return;
+
                     indexY--;
-                    int direction = random.Next(0, 2);
-                    spriteIndex = direction == 0 ? 3 : 5;
-                    indexX += direction;
-                    enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
-                    jumpTimer = 20;
-                    hasJumped = false;
+                    if (indexY < 0 && enemyJumpManager.NowJumpState == JumpStates.readyToJump)
+                    {
+                        IsAlive = false;
+                        return;
+                    }
+                    else
+                    {
+                        int direction = random.Next(0, 2);
+                        spriteIndex = direction == 0 ? 3 : 5;
+                        indexX += direction;
+                        hasJumped = false;
+                        hasColored = false;
+                        if (indexY == 0)
+                        {
+                            enemyJumpManager.TimeToEnd = 0.8f;
+                            enemyJumpManager.UpdateTargetPosition(new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X, 1080 + texture.Height), position, JumpStates.inJump);
+                            spriteIndex = 1;
+                        }
+                        else
+                        {
+                            enemyJumpManager.UpdateTargetPosition(CountPositionByIndex(), position, JumpStates.inJump);
+                        }
+
+
+                        jumpTimer = 20;
+                    }
+                    
+                    
                     Game1.Cells[indexY][indexX].objectStatechanged(this);
                 }
             }

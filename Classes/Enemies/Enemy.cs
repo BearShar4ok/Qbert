@@ -107,7 +107,7 @@ namespace QBert.Classes.Enemies
             indexX = random.Next(1, 3);
             Vector2 tpos = CountPositionByIndex();
             Vector2 npos = new Vector2(CountPositionByIndex().X, -200);
-            enemyJumpManager.TimeToEnd = 1f;
+            //enemyJumpManager.TimeToEnd = 1f;
             enemyJumpManager.UpdateTargetPosition(tpos, npos, JumpStates.freeFall);
         }
         public virtual Vector2 CountPositionByIndex()
