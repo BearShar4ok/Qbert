@@ -46,6 +46,14 @@ namespace QBert.Classes
                 {
                     CellState = CellStates.enemy;
                 }
+                if (obj is GreenCircle)
+                {
+                    CellState = CellStates.greenCircle;
+                }
+                if (obj is CoolEnemy)
+                {
+                    CellState = CellStates.coolEnemy;
+                }
                 if (obj.ToString() == "cube")
                 {
                     CellState = CellStates.cube;

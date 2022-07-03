@@ -13,8 +13,8 @@ namespace QBert.Classes.Enemies
         public GreenCircle() : base()
         {
             position = CountPositionByIndex();
-            sprite_width = 49;
-            sprite_height = 30;
+            sprite_width = 33;
+            sprite_height = 20;
             spriteIndex = 1;
             textureName = "greenCircle";
         }

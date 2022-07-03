@@ -95,12 +95,26 @@ namespace QBert.Classes
                 }
                 spriteIndex -= spriteIndex % 2;
 
+                #region Коллизия
                 if (Game1.Cells[indexY][indexX].CellState == CellStates.enemy && PlayerState == PlayerStates.notOnPlatform)
                 {
                     lives--;
                     Game1.PlayerLostLife();
                 }
 
+                if (Game1.Cells[indexY][indexX].CellState == CellStates.coolEnemy && PlayerState == PlayerStates.notOnPlatform)
+                {
+                    score += 300;
+                    Game1.KillThing(SpawnableEnemies.coolEnemy);
+                }
+
+                if (Game1.Cells[indexY][indexX].CellState == CellStates.greenCircle && PlayerState == PlayerStates.notOnPlatform)
+                {
+                    score += 100;
+                    Game1.KillThing(SpawnableEnemies.greenBall);
+                    Game1.StunAll();
+                }
+                #endregion
             }
 
             if (Game1.Cells[IndexY][IndexX].CellState == CellStates.platform && playerJump.NowJumpState == JumpStates.readyToJump && PlayerState != PlayerStates.onPlatform)
