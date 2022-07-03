@@ -53,8 +53,6 @@ namespace QBert.Classes.Enemies
                     Follow(playerIndexes);
                     if (Game1.Cells[indexY][indexX].CellState == CellStates.air || Game1.Cells[indexY][indexX].CellState == CellStates.platform)
                     {
-                        snakeJump.TimeToEnd = 1.2f;
-                        snakeJump.UpdateTargetPosition(new Vector2(Game1.Cells[indexY][indexX].Rect_top.X + 20, 1300), position, JumpStates.inJump);
                         IsAlive = false;
                         enemyJump.TimeToEnd = 1.2f;
                         int x = 100;

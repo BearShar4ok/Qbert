@@ -49,7 +49,7 @@ namespace QBert.Classes.Enemies
                 position = enemyJump.position;
             }
 
-            if (hasJumped && circleJump.NowJumpState == JumpStates.readyToJump)
+            if (hasJumped && enemyJump.NowJumpState == JumpStates.readyToJump)
             {
                 hasJumped = false;
                 Game1.Cells[indexY][indexX].objectStatechanged(this);
