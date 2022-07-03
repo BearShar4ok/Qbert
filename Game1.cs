@@ -192,7 +192,7 @@ namespace QBert
                 Exit();
 
             // TODO: Add your update logic here
-            spawnTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            
 
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -262,7 +262,7 @@ namespace QBert
                 }
                 else return;
             }
-
+            spawnTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             if (spawnTimer <= 0)
             {
                 SpawnEnemy();
