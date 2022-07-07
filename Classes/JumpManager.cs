@@ -53,6 +53,9 @@ namespace QBert.Classes
             this.startPos = startPos;
             position = startPos;
             this.NowJumpState = NowJumpState;
+            timeToEnd = 0.4f;
+            g = 2000f;
+            nowTime = 0;
         }
         private void FreeFall(GameTime gametime)
         {

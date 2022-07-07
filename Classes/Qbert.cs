@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -64,13 +65,10 @@ namespace QBert.Classes
         {
             if (position.Y >= 1100 && !IsPlayerLive)
             {
-                //IsPlayerLive = true;
+                IsPlayerLive = true;
+                hasChangedCubeColor = false;
                 lives--;
                 Game1.PlayerLostLife();
-                indexX = 1;
-                indexY = 7;
-                position.Y = Game1.Cells[indexY][indexX].Rect_top.Y + magicConstY;
-                position.X = Game1.Cells[indexY][indexX].Rect_top.X + magicConstX;
                 //playerJump.UpdateTargetPosition(position,position,JumpStates)
                 playerJump.NowJumpState = JumpStates.readyToJump;
             }
@@ -95,12 +93,13 @@ namespace QBert.Classes
                 {
                     Game1.cubes[IndexY - 1][IndexX - 1].ChangeTopColor(true);
                     score += 25;
+                    Debug.WriteLine("+25");
                     hasChangedCubeColor = true;
                 }
                 spriteIndex -= spriteIndex % 2;
 
                 #region Коллизия
-                if (Game1.Cells[indexY][indexX].CellState == CellStates.enemy && PlayerState == PlayerStates.notOnPlatform)
+                if (Game1.Cells[indexY][indexX].CellState == CellStates.enemy && PlayerState == PlayerStates.notOnPlatform && !Game1.isFrozen)
                 {
                     lives--;
                     Game1.PlayerLostLife();
@@ -109,12 +108,16 @@ namespace QBert.Classes
                 if (Game1.Cells[indexY][indexX].CellState == CellStates.coolEnemy && PlayerState == PlayerStates.notOnPlatform)
                 {
                     score += 300;
+                    Debug.WriteLine("+300");
+                    Game1.Cells[indexY][indexX].ObjectStatechanged("cube");
                     Game1.KillThing(SpawnableEnemies.coolEnemy);
                 }
 
                 if (Game1.Cells[indexY][indexX].CellState == CellStates.greenCircle && PlayerState == PlayerStates.notOnPlatform)
                 {
                     score += 100;
+                    Debug.WriteLine("+100");
+                    Game1.Cells[indexY][indexX].ObjectStatechanged("cube");
                     Game1.KillThing(SpawnableEnemies.greenBall);
                     Game1.StunAll();
                 }
@@ -144,6 +147,15 @@ namespace QBert.Classes
             }
             if (playerJump.NowJumpState == JumpStates.readyToJump && PlayerState == PlayerStates.notOnPlatform)
             {
+                Action<bool> updateTargetPos = (isRight) =>
+                {
+                    playerJump.NowJumpState = JumpStates.inJump;
+                    float timeToEnd;
+                    (timeToEnd, targetPosition) = ChechFallTraecktory(isRight);
+                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
+                    playerJump.TimeToEnd = timeToEnd;
+                    hasJumped = true;
+                };
                 if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 {
                     hasChangedCubeColor = false;
@@ -151,10 +163,7 @@ namespace QBert.Classes
                     spriteIndex = 3;
                     indexY++;
                     indexX--;
-                    playerJump.NowJumpState = JumpStates.inJump;
-                    targetPosition = ChechFallTraecktory(false);
-                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
-                    if (!hasJumped) hasJumped = true;
+                    updateTargetPos(false);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Z))
                 {
@@ -162,10 +171,7 @@ namespace QBert.Classes
                     IsDyingDown = true;
                     spriteIndex = 7;
                     indexY--;
-                    playerJump.NowJumpState = JumpStates.inJump;
-                    targetPosition = ChechFallTraecktory(false);
-                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
-                    if (!hasJumped) hasJumped = true;
+                    updateTargetPos(false);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.C))
                 {
@@ -174,10 +180,7 @@ namespace QBert.Classes
                     spriteIndex = 5;
                     indexY--;
                     indexX++;
-                    playerJump.NowJumpState = JumpStates.inJump;
-                    targetPosition = ChechFallTraecktory(true);
-                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
-                    if (!hasJumped) hasJumped = true;
+                    updateTargetPos(true);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.E))
                 {
@@ -185,10 +188,7 @@ namespace QBert.Classes
                     IsDyingDown = false;
                     spriteIndex = 1;
                     indexY++;
-                    playerJump.NowJumpState = JumpStates.inJump;
-                    targetPosition = ChechFallTraecktory(true);
-                    playerJump.UpdateTargetPosition(targetPosition, position, JumpStates.inJump, "Player");
-                    if (!hasJumped) hasJumped = true;
+                    updateTargetPos(true);
                 }
             }
         }
@@ -196,7 +196,7 @@ namespace QBert.Classes
         {
             brush.Draw(texture, position, rectangleOfPlayer, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
-        private Vector2 ChechFallTraecktory(bool isRight)
+        private (float, Vector2) ChechFallTraecktory(bool isRight)
         {
             int x = -100;
             if (isRight)
@@ -204,6 +204,7 @@ namespace QBert.Classes
                 x = 100;
             }
             Vector2 targetPos;
+            float timeToEnd = 0.4f;
             if (Game1.Cells[IndexY][IndexX].CellState != CellStates.air)
             {
                 targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + magicConstX, Game1.Cells[IndexY][IndexX].Rect_top.Y + magicConstY);
@@ -211,21 +212,21 @@ namespace QBert.Classes
             else
             {
                 if (!IsDyingDown)
-                    playerJump.TimeToEnd = 1.2f;
+                    timeToEnd = 1.2f;
                 else
-                    playerJump.TimeToEnd = 0.8f;
-                targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + x, 1101);
+                    timeToEnd = 0.8f;
+                targetPos = new Vector2(Game1.Cells[IndexY][IndexX].Rect_top.X + x, 1200);
                 IsPlayerLive = false;
             }
-            return targetPos;
+            return (timeToEnd, targetPos);
         }
 
         public void StartFalling()                          
         {
             PlayerState = PlayerStates.notOnPlatform;
-            playerJump.TimeToEnd = 1f;
             playerJump.UpdateTargetPosition(new Vector2(Game1.Cells[7][1].Rect_top.X + magicConstX, Game1.Cells[7][1].Rect_top.Y + magicConstY),
                 position, JumpStates.freeFall, "Player");
+            playerJump.TimeToEnd = 1f;
             indexX = 1;
             indexY = 7;
         }
@@ -236,6 +237,14 @@ namespace QBert.Classes
             nowTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             position.X = startPosition.X + ((topPosition.X - startPosition.X) * nowTimer / maxMoveTime);
             position.Y = startPosition.Y + ((topPosition.Y - startPosition.Y) * nowTimer / maxMoveTime);
+        }
+
+        public void ReturnPosition()
+        {
+            indexX = 1;
+            indexY = 7;
+            position.Y = Game1.Cells[indexY][indexX].Rect_top.Y + magicConstY;
+            position.X = Game1.Cells[indexY][indexX].Rect_top.X + magicConstX;
         }
     }
 }

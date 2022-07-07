@@ -17,32 +17,36 @@ namespace QBert
         public static Action PlayerSteppedOnPlatform = MakePlatformMove;
         public static Action PlayerDroppedFromPlatform = MakePlatformEndJourney;
         public static Action PlayerLostLife = () => { playerFreezesAll = 2000f;  };
-        public static Action StunAll = () => { stunAllEnemies = 10000f; };
+        public static Action StunAll = () => { stunAllEnemies = 5000f; };
         public static Action<SpawnableEnemies> KillThing = enemy => 
         {
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (enemy == SpawnableEnemies.coolEnemy && enemies[i] is CoolEnemy)
                 {
+                    Cells[enemies[i].IndexY][enemies[i].IndexX].ObjectStatechanged("cube");
                     enemies.RemoveAt(i);
                     break;
                 }
 
                 if (enemy == SpawnableEnemies.greenBall && enemies[i] is GreenCircle)
                 {
+                    Cells[enemies[i].IndexY][enemies[i].IndexX].ObjectStatechanged("cube");
                     enemies.RemoveAt(i);
                     break;
                 }
             }
         };
 
+        public static bool isFrozen = false;
+
         private static List<List<List<Color>>> colors = new List<List<List<Color>>>()
         {
             new List<List<Color>>()
             {
-                new List<Color>() { new Color(0, 69, 222), new Color(239, 222, 119), new Color(33, 185, 49) },
-                new List<Color>() { new Color(102, 49, 0) },
-                new List<Color>() { new Color(255, 119, 33) }
+                new List<Color>() { new Color(255, 102, 102), new Color(222, 222, 0), new Color(86, 70, 239) },
+                new List<Color>() { new Color(86, 169, 153) },
+                new List<Color>() { new Color(49, 70, 70) }
             },
             new List<List<Color>>()
             {
@@ -96,12 +100,13 @@ namespace QBert
             IsMouseVisible = true;
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            //_graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = true;
 
             // 1000 w  900 h
             HUD.LeftBorderX = _graphics.PreferredBackBufferWidth / 2 - 500;
             HUD.TopBorderY = _graphics.PreferredBackBufferHeight / 2 - 450;
             HUD.Init();
+            HUD.Color = colors[round][0][2];
         }
 
         protected override void Initialize()
@@ -145,7 +150,8 @@ namespace QBert
             }
             enemies = new List<Enemy>();
             player = new Qbert(1, 7, _graphics.PreferredBackBufferHeight); // 952 399
-            platforms = new List<Platform>() { new Platform(0, 4), new Platform(4, 5) };
+            int x = random.Next(1, 7);
+            platforms = new List<Platform>() { new Platform(0, random.Next(1, 7)), new Platform(x, 9 - x) };
 
             //enemies.Add(new RedCircle());
             //enemies.Add(new GreenCircle());
@@ -210,10 +216,12 @@ namespace QBert
 
             if (platformFreezesAll > 0)
             {
+                isFrozen = true;
                 platformFreezesAll -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 
                 if (platformFreezesAll <= 0)
                 {
+                    isFrozen = false;
                     platformFreezesAll = 0;
                     for (int i = 0; i < platforms.Count; i++)
                     {
@@ -225,19 +233,21 @@ namespace QBert
                     }
                     player.StartFalling();
                 }
-                else return;
+                else
+                {
+                    return;
+                }
             }
 
             if (playerFreezesAll > 0)
             {
+                if (player.Lives < 0) Exit();
+                isFrozen = true;
                 playerFreezesAll -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (playerFreezesAll <= 0)
                 {
+                    isFrozen = false;
                     playerFreezesAll = 0;
-                    foreach (Enemy enemy in enemies)
-                    {
-                        enemy.IsAlive = false;
-                    }
                     enemies.Clear();
                     foreach (List<Cell> c in Cells)
                     {
@@ -246,21 +256,30 @@ namespace QBert
                             if (cell.CellState == CellStates.enemy) cell.ObjectStatechanged("cube");
                         }
                     }
+                    player.ReturnPosition();
                 }
-                else return;
+                else
+                {
+                    return;
+                }
             }
 
             player.Update(gameTime);
 
             if (stunAllEnemies > 0)
             {
+                isFrozen = true;
                 stunAllEnemies -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (stunAllEnemies <= 0)
                 {
+                    isFrozen = false;
                     stunAllEnemies = 0;
                     return;
                 }
-                else return;
+                else
+                {
+                    return;
+                }
             }
             spawnTimer -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             if (spawnTimer <= 0)
@@ -351,8 +370,8 @@ namespace QBert
 
             HUD.Draw(_spriteBatch);
 
-            // _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(0, 0, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
-            //_spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(_graphics.PreferredBackBufferWidth - arcadeBackgroundSide.Width, _graphics.PreferredBackBufferHeight - arcadeBackgroundSide.Height, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
+             _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(0, 0, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
+            _spriteBatch.Draw(arcadeBackgroundSide, new Rectangle(_graphics.PreferredBackBufferWidth - arcadeBackgroundSide.Width, _graphics.PreferredBackBufferHeight - arcadeBackgroundSide.Height, arcadeBackgroundSide.Width, arcadeBackgroundSide.Height), Color.White);
 
             _spriteBatch.Draw(arcadeBackgroundFooter, new Rectangle(_graphics.PreferredBackBufferWidth / 2 - arcadeBackgroundFooter.Width / 2,
                 _graphics.PreferredBackBufferHeight - arcadeBackgroundFooter.Height, arcadeBackgroundFooter.Width, arcadeBackgroundFooter.Height), Color.White);
@@ -382,9 +401,11 @@ namespace QBert
             round = round == 3 ? 0 : round + 1;
             HUD.Level = level + 1;
             HUD.Round = round + 1;
+            HUD.Color = colors[round][0][2];
             cubes.Clear();
             Cells.Clear();
             enemies.Clear();
+            platforms.Clear();
 
             int amountCellsInLine = 9;
             for (int i = 0; amountCellsInLine >= i; i++)
@@ -417,9 +438,21 @@ namespace QBert
                 }
             }
 
+            foreach (var c in cubes)
+            {
+                foreach (var cube in c)
+                {
+                    cube.LoadContent(Content);
+                }
+            }
+
 
             player.IndexX = 1;
             player.IndexY = 7;
+            player.Position = new Vector2(Cells[7][1].Rect_top.X + 15, Cells[7][1].Rect_top.Y - 15);
+
+            int x = random.Next(1, 7);
+            platforms = new List<Platform>() { new Platform(0, random.Next(1, 7)), new Platform(x, 9 - x) };
         }
 
         private static void MakePlatformMove()
